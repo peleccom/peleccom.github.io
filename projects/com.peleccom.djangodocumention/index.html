@@ -15,13 +15,34 @@
       gtag('config', 'UA-34188273-2');
     </script>
 
+    <style>
+        .app {
+            display: flex;
+        }
+        .app__icon {
+            display: inline-block;
+            height: 32px;
+            width: 32px;
+        }
+
+        .app__title {
+            display: inline-block;
+            line-height: 32px;
+            margin: 0;
+            margin-left: 20px;
+        }
+
+    </style>
+
 
 </head>
 <body>
     <h1>Alexander Pitkin (@peleccom)</h1>
 
-    <h3>Django offline documentation</h3>
-
+    <div class="app">
+        <img class="app__icon" src="ic_launcher-web.png" alt="application icon">
+        <h3 class="app__title">Django offline documentation</h3>        
+    </div>
     <p>
         Android application. This is offline version of the offline version of official <a href="https://djangoprojects.com">django documentation</a>
     </p>
@@ -30,7 +51,7 @@
         Download links
     </p>
 
-    <ul>
+    <ul class="p-list">
         <li>
             <a href="https://play.google.com/store/apps/details?id=com.peleccom.djangodocumentation">Google play store</a>
                 <!-- TODO add pay store icon -->
