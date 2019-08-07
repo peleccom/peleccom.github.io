@@ -6,7 +6,7 @@ layout: home
 title: Home
 ---
 
-## Personal site homepage
+## Personal site
 
 Hello, my name is Alexander Pitkin (@peleccom).
 
