@@ -3,8 +3,11 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: home
+title: Home
 ---
 
-## Hello, my name is Alexander Pitkin (@peleccom).
+## Personal site homepage
 
-I am software engineer
+Hello, my name is Alexander Pitkin (@peleccom).
+
+I am software engineer.
