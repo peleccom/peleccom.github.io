@@ -1,3 +1,6 @@
+---
+---
+
 <!DOCTYPE html>
     <html>
     <head>
@@ -6,20 +9,14 @@
       <title>Privacy Policy</title>
       <style> body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding:1em; } </style>
 
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-34188273-2"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'UA-34188273-2');
-        </script>
+      {%- if jekyll.environment == 'production' and site.google_analytics -%}
+        {%- include google-analytics.html -%}
+      {%- endif -%}
 
     </head>
     <body>
-    <h2 style="text-align:center;">Privacy Policy</h2> <p>
-                    Alexander Pitkin built the Django documentation &amp; tutorial offline app as
+    <h2>Privacy Policy</h2> <p>
+                    Alexander Pitkin built the Scrapy offline documentation app as
                     an Ad Supported app. This SERVICE is provided by
                     Alexander Pitkin at no cost and is intended for
                     use as is.
@@ -39,7 +36,7 @@
                   </p> <p>
                     The terms used in this Privacy Policy have the same meanings
                     as in our Terms and Conditions, which is accessible at
-                    Django documentation &amp; tutorial offline unless otherwise defined in this Privacy
+                    Scrapy offline documentation unless otherwise defined in this Privacy
                     Policy.
                   </p> <p><strong>Information Collection and Use</strong></p> <p>
                     For a better experience, while using our Service,
@@ -53,7 +50,7 @@
                   </p> <div><p>
                       Link to privacy policy of third party service providers
                       used by the app
-                    </p> <ul><li><a href="https://www.google.com/policies/privacy/" target="_blank">Google Play Services</a></li><li><a href="https://support.google.com/admob/answer/6128543?hl=en" target="_blank">AdMob</a></li><li><a href="https://firebase.google.com/policies/analytics" target="_blank">Firebase Analytics</a></li><!----><!----><!----><!----><!----><!----><!----><!----></ul></div> <p><strong>Log Data</strong></p> <p>
+                    </p> <ul><li><a href="https://www.google.com/policies/privacy/" target="_blank">Google Play Services</a></li><li><a href="https://support.google.com/admob/answer/6128543?hl=en" target="_blank">AdMob</a></li><!----><!----><!----><!----><!----><!----><!----><!----><!----></ul></div> <p><strong>Log Data</strong></p> <p>
                     I want to inform you that whenever
                     you use my Service, in a case of an error in the
                     app I collect data and information (through third

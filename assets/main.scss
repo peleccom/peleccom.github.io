@@ -1,0 +1,32 @@
+---
+---
+@import "minima";
+
+.social-media-list {
+    li {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .social-icon {
+        font-size: 20px;
+        color: #{$grey-color};
+    }
+}
+
+
+.app {
+    display: flex;
+    margin-bottom: 20px;
+}
+.app__icon {
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+}
+
+.app__title {
+    display: inline-block;
+    line-height: 32px;
+    margin: 0;
+    margin-left: 20px;
+}
