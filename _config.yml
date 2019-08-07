@@ -38,6 +38,10 @@ theme: minima
 plugins:
   - jekyll-feed
   - jekyll-sitemap
+
+webmaster_verifications:
+  yandex: 488b5d8930b870a1
+  bing: 5E29942831C03280C5D417374C5438B9
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
