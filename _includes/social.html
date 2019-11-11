@@ -13,5 +13,7 @@
 
   {%- if social.telegram -%}<li><a href="https://t.me/{{ social.telegram | cgi_escape | escape }}" title="{{ social.telegram | escape }}"><i class="fab fa-telegram social-icon"></i></a></li>{%- endif -%}
 
+  {%- if social.skype -%}<li><a href="skype:{{ social.skype | cgi_escape | escape }}?chat" title="{{ social.skype | escape }}"><i class="fab fa-skype social-icon"></i></a></li>{%- endif -%}
+
   {%- if social.rss -%}<li><a href="{{ 'feed.xml' | relative_url }}" title="{{ social.rss | escape }}"><i class="fas fa-rss social-icon"></i></a></li>{%- endif -%}
 </ul>
