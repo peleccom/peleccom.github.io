@@ -26,7 +26,7 @@ title: Curriculum vitae
    * This CSS document is delivered to you under the CC BY-SA 3.0 License.
    * https://creativecommons.org/licenses/by-sa/3.0/deed.en_US
    */
-  
+
   /* Whole document */
   body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -35,7 +35,7 @@ title: Curriculum vitae
       background: #FFFFFF;
       padding: 10px 10px 10px 10px;
   }
-  
+
   /* Title of the resume */
   h1 {
       font-size: 55px;
@@ -48,7 +48,7 @@ title: Curriculum vitae
       color: #FFFFFF;
       text-shadow: 1px 1px 1px #333;
   }
-  
+
   /* Titles of categories */
   h2 {
       /* This is called "sectioncolor" in the ConTeXt stylesheet. */
@@ -69,7 +69,7 @@ title: Curriculum vitae
       color: #FFFFFF;
       text-shadow: 1px 1px 1px #333;
   }
-  
+
   /* Definitions */
   dt {
       float: left;
@@ -84,12 +84,12 @@ title: Curriculum vitae
       margin-top:0;
       margin-bottom:7px;
   }
-  
+
   /* Blockquotes */
   blockquote {
       text-align: center
   }
-  
+
   /* Links */
   a {
       text-decoration: none;
@@ -101,19 +101,19 @@ title: Curriculum vitae
       text-decoration: none;
       text-shadow: 1px 1px 1px #333;
   }
-  
+
   /* Horizontal separators */
   hr {
       color: #A6A6A6;
   }
-  
+
   table {
       width: 100%;
   }
   </style>
     {%- if jekyll.environment == 'production' and site.google_analytics -%}
       {%- include google-analytics.html -%}
-    {%- endif -%}    
+    {%- endif -%}
 </head>
 <body>
 <h1 id="alexander-pitkin">Alexander Pitkin</h1>
@@ -145,61 +145,37 @@ title: Curriculum vitae
 <dt><strong>Language/Programing</strong>:</dt>
 <dd><p>Python</p>
 </dd>
-<dd>Javascript(Coffeescript, TypeScript)
+<dd>Javascript/TypeScript
 </dd>
-<dd>C/C++/C#
-</dd>
-<dd>Java
-</dd>
-<dd>Delphi
-</dd>
-<dd>HTML (Pug)
+<dd>Bash
 </dd>
 <dd>CSS (LESS/SASS/Stylus)
 </dd>
-<dd>BASH
+<dd>HTML
+</dd>
+<dd>C/C++/C#/Java/Delphi
 </dd>
 <dt><strong>Frameworks/Techologies</strong>:</dt>
-<dd>Django
+<dd>Django/Django Rest Framework
 </dd>
-<dd>Django Rest Framework
+<dd>Flask
 </dd>
-<dd>AngularJs/Angular 2+/7
+<dd>FastAPI
 </dd>
 <dd>SQLAlchemy/GeoAlchemy 2
 </dd>
-<dd>React Native
-</dd>
-<dd>Qt
-</dd>
 <dd>NodeJS
 </dd>
-<dd>Android SDK
+<dd>AngularJs/Angular 2+
 </dd>
-<dt><strong>IDE</strong>:</dt>
-<dd>PyCharm
+<dd>RxJS
 </dd>
-<dd>Eclipse
-</dd>
-<dd>Android-Studio
-</dd>
-<dt><strong>Software</strong>:</dt>
-<dd><p>Redis/ Memchahed</p>
-</dd>
-<dd>ElasticSearch
+<dd>React Native/Android SDK
 </dd>
 <dt><strong>Systems</strong>:</dt>
 <dd>Linux
 </dd>
 <dd>Windows
-</dd>
-<dt><strong>Networking</strong>:</dt>
-<dd>TCP/IP, OSI, HTTP
-</dd>
-<dt><strong>VCS</strong>:</dt>
-<dd><p>GIT</p>
-</dd>
-<dd>SVN
 </dd>
 <dt><strong>Databases</strong>:</dt>
 <dd><p>SQL</p>
@@ -210,16 +186,80 @@ title: Curriculum vitae
 </dd>
 <dd>MySQL
 </dd>
+<dd>Redis
+</dd>
+<dd>Memcached
+</dd>
+<dd>ElasticSearch
+</dd>
+<dt><strong>Project/Task Management Tools</strong>:</dt>
+<dd><p>Asana</p>
+</dd>
+<dd>Trello
+</dd>
+<dd>JIRA
+</dd>
 </dl>
-<h2 id="experience">Experience</h2>
+<h2 id="experience-7-years">Experience (7+ years)</h2>
 <p><strong>2017 - present iTechArt, Software Engineer</strong></p>
+<p>Senior fullstack developer</p>
 <p><strong>2014 - 2017 Nord-Soft, Python/Django developer</strong></p>
 <p>Creating and maintenance web sites using django. Creating web site API using <em>Django Rest Framework</em>, Database development Working with frontend (Javascript, JQuery, AngularJS/Angular2+, CSS/LESS)</p>
 <h2 id="projects">Projects</h2>
 <ol type="1">
+<li>Real Estate Portal printing service - Project Web service to make pdf for a given URL description
+<ul>
+<li><em>Stack</em>: NodeJS, Express, Puppeteer, bull</li>
+<li><em>Role</em>: Senior Software Engineer</li>
+<li><em>Responsibilities</em>:
+<ul>
+<li>Developed express API</li>
+<li>Developed Puppeteer integration</li>
+<li>Developed Docker and CircleCI integration</li>
+<li>Added API tests and compare PDF tests</li>
+</ul></li>
+</ul></li>
+<li>Real Estate Portal API microservices - various API microservices for real estate portal
+<ul>
+<li><em>Stack</em>: Django, Flask, FastAPI, SQLAlchemy, Postgres, Postgis, Redis, Docker, Kubernetes</li>
+<li><em>Role</em>: Senior Software Engineer</li>
+<li><em>Responsibilities</em>:
+<ul>
+<li>Implement API microservice</li>
+<li>Split monolitic application into microservice</li>
+<li>Setup service integration</li>
+</ul></li>
+</ul></li>
+<li>Real Estate Portal: Data Intelligence Board - A Web application that allows users to: - obtain price valuations and prediction for the real estate property - understand the market - explore the surroundings (location &amp; nearby)
+<ul>
+<li><em>Stack</em>: AngularJs, Angular, Django, Flask, SQLAlchemy, HTML 5, CSS3, Alembic, Docker, Mapbox, Google Maps API, PostGIS, PostgreSQL</li>
+<li><em>Role</em>: Software Engineer</li>
+<li><em>Responsibilities</em>
+<ul>
+<li>Implemented a new version of the Web API with Flask and SQLAlchemy</li>
+<li>Reworked big subsets of the data model and updated the database schema accordingly</li>
+<li>Developed and implemented the front-end application</li>
+<li>Migrated a big live application from AngularJS to Angular2</li>
+<li>Integrated the app with other services</li>
+</ul></li>
+</ul></li>
+<li>nuvrachtwagen - Driving licence exam booking system.
+<ul>
+<li><em>Stack</em>: Django, React.js, Celery, PostgreSQL, Redis, Docker, Traefik</li>
+<li><em>Role</em>: Senior Software Engineer</li>
+<li><em>Achievements</em>:
+<ul>
+<li>Developed the back-end</li>
+<li>Designed the data model and implemented the database schema</li>
+<li>Implemented the deployment part and deployed the application</li>
+<li>Added the Celery application</li>
+<li>Optimized performance</li>
+</ul></li>
+</ul></li>
 <li>http://roomchoice.com/ — web portal for management students housing. Room Choice handles the entire student leasing experience and provides easy tools to help managers track assignments, payments, and communication
 <ul>
-<li>Back-end development:
+<li><em>Role</em>: Software Engineer</li>
+<li><em>Back-end development</em>:
 <ul>
 <li>Models design</li>
 <li>Logic/architecture design</li>
@@ -228,17 +268,18 @@ title: Curriculum vitae
 <li>Payment system integration</li>
 <li>DB and site loading optimization</li>
 </ul></li>
-<li>Front-end development:
+<li><em>Front-end development</em>:
 <ul>
 <li>CSS/HTML</li>
 <li>Angular templates development</li>
 <li>Back-end Integration</li>
 </ul></li>
-<li>Main technologies and products used: Python/Django, Celery, AngularJS, HTML/CSS, JavaScript/Coffescript, jQuery, OAuth, PotgreSQL, Stripe API</li>
+<li><em>Main technologies and products used</em>: Python/Django, Celery, AngularJS, HTML/CSS, JavaScript/Coffescript, jQuery, OAuth, PotgreSQL, Stripe API</li>
 </ul></li>
 <li>http://infobit.com/— User generated news portal. Allow user to rate news and change public news ratings
 <ul>
-<li>Back-end development:
+<li><em>Role</em>: Software Engineer</li>
+<li><em>Back-end development</em>:
 <ul>
 <li>Models design;</li>
 <li>Logic/architecture design</li>
@@ -246,17 +287,18 @@ title: Curriculum vitae
 <li>REST API for front-end</li>
 <li>Celery tasks</li>
 </ul></li>
-<li>Front-end development:
+<li><em>Front-end development</em>:
 <ul>
 <li>CSS/HTML</li>
 <li>Angular templates development</li>
 <li>Back-end Integration</li>
 </ul></li>
-<li>Main technologies and products used: Python/Django, AngularJS ,Celery, HTML/CSS, JavaScript, jQuery, jQuery.ui, PotgreSQL, Redis</li>
+<li><em>Main technologies and products used</em>: Python/Django, AngularJS ,Celery, HTML/CSS, JavaScript, jQuery, jQuery.ui, PotgreSQL, Redis</li>
 </ul></li>
 <li>Project: Person Heath Assistance – user personal health assistance application. Application encourage healthy user habits.
 <ul>
-<li>Back-end development :
+<li><em>Role</em>: Software Engineer</li>
+<li><em>Back-end development</em> :
 <ul>
 <li>database development and maintenance;</li>
 <li>backend and frontend implementation- add new features;</li>
@@ -264,32 +306,24 @@ title: Curriculum vitae
 <li>DB and site loading optimization;</li>
 <li>implementing Django templates;</li>
 </ul></li>
-<li>Main technologies and products used: Python/Django, HTML/CSS, JavaScript, jQuery, jQuery.ui, Backbone, Celery, MSSQL Server, Google Cloud Messaging</li>
+<li><em>Main technologies and products used</em>: Python/Django, HTML/CSS, JavaScript, jQuery, jQuery.ui, Backbone, Celery, MSSQL Server, Google Cloud Messaging</li>
 </ul></li>
 </ol>
 <h2 id="languages">Languages</h2>
 <p><strong>Russian</strong> native</p>
 <p><strong>English</strong> intermediate</p>
 <h2 id="cerificates">Cerificates</h2>
-<p><strong>Cisco Certified Network Associate(CCNA Routing and Switching (v5.0))</strong>, 2015<br />
-Cisco Networking academy</p>
-<p><strong>Linux development courses</strong>, 2014<br />
-EPAM</p>
-<p><strong>Android Development training</strong>, 2013<br />
-ForteKnowledge</p>
-<p><strong>Cisco Certified Network Associate (CCNA1, CCNA2)</strong>, 2008-2009<br />
-Cisco Networking academy — Toronto, CANADA</p>
-<p><strong>Programming in python</strong>, 2011<br />
-INTUIT NATIONAL OPEN UNIVERSITY<br />
-<a href="http://www.intuit.ru/verifydiplomas/00119534" class="uri" target="_blank">http://www.intuit.ru/verifydiplomas/00119534</a></p>
+<p><strong>Cisco Certified Network Associate(CCNA Routing and Switching (v5.0))</strong>, 2015 Cisco Networking academy</p>
+<p><strong>Linux development courses</strong>, 2014 EPAM</p>
+<p><strong>Android Development training</strong>, 2013 ForteKnowledge</p>
+<p><strong>Cisco Certified Network Associate (CCNA1, CCNA2)</strong>, 2008-2009 Cisco Networking academy — Toronto, CANADA</p>
+<p><strong>Programming in python</strong>, 2011 INTUIT NATIONAL OPEN UNIVERSITY <a href="http://www.intuit.ru/verifydiplomas/00119534" class="uri" target="_blank">http://www.intuit.ru/verifydiplomas/00119534</a></p>
 <h2 id="others">Others</h2>
-<p><strong>My Github profile</strong><br />
-<a href="https://github.com/peleccom" class="uri" target="_blank">https://github.com/peleccom</a></p>
-<p><strong>My LinkeIn profile</strong><br />
-<a href="https://www.linkedin.com/pub/alexander-pitkin/57/1a4/9b2" class="uri" target="_blank">https://www.linkedin.com/pub/alexander-pitkin/57/1a4/9b2</a></p>
+<p><strong>My Github profile</strong> <a href="https://github.com/peleccom" class="uri" target="_blank">https://github.com/peleccom</a></p>
+<p><strong>My LinkeIn profile</strong> <a href="https://www.linkedin.com/pub/alexander-pitkin/57/1a4/9b2" class="uri" target="_blank">https://www.linkedin.com/pub/alexander-pitkin/57/1a4/9b2</a></p>
 <hr />
 <blockquote>
-<p><a href="mailto:pitkinalexander@gmail.com">pitkinalexander@gmail.com</a> • +375 33 324 23 35 • 30 years old<br />
+<p><a href="mailto:pitkinalexander@gmail.com">pitkinalexander@gmail.com</a> • +375 33 324 23 35 • 31 years old<br />
 Minsk, Belarus</p>
 </blockquote>
 </body>
