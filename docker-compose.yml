@@ -2,8 +2,11 @@ version: '3'
 services:
   jekyll:
     command: jekyll serve --watch --force_polling --verbose
-    image: jekyll/jekyll:latest
+    image: jekyll/jekyll:3.8
     volumes:
       - .:/srv/jekyll
     ports:
       - 8000:4000
+    environment:
+      JEKYLL_UID: 1001
+      JEKYLL_GID: 1001
