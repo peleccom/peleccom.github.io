@@ -19,7 +19,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   Alexander Pitkin. Software engineer.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://peleccom.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-google_analytics: UA-34188273-2
+google_analytics: UA-34188273-1
 
 minima:
   social_links:
