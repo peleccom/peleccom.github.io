@@ -9,10 +9,10 @@ title: Curriculum vitae
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>resume</title>
   <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
   </style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -70,12 +70,13 @@ title: Curriculum vitae
       text-shadow: 1px 1px 1px #333;
   }
 
+
   /* Definitions */
   dt {
       float: left;
       clear: left;
       width: 17%;
-      /*font-weight: bold;*/
+      /* font-weight: bold; */
   }
   dd {
       margin-left: 30%;
@@ -111,16 +112,16 @@ title: Curriculum vitae
       width: 100%;
   }
   </style>
-    {%- if jekyll.environment == 'production' and site.google_analytics -%}
-    {%- include google-analytics.html -%}
-    {%- endif -%}
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <meta property='og:title' content='Alexander Pitkin CV'/>
-    <meta property='og:image' content='//peleccom.github.io/me.png'/>
-    <meta property='og:description' content='Alexander Pitkin Software Developer'/>
-    <meta property='og:url' content='//peleccom.github.io/cv.html'/>
+      {%- if jekyll.environment == 'production' and site.google_analytics -%}
+      {%- include google-analytics.html -%}
+      {%- endif -%}
+      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+      <meta property='og:title' content='Alexander Pitkin CV'/>
+      <meta property='og:image' content='//peleccom.github.io/me.png'/>
+      <meta property='og:description' content='Alexander Pitkin Software Developer'/>
+      <meta property='og:url' content='//peleccom.github.io/cv.html'/>
 </head>
 <body>
 <h1 id="alexander-pitkin">Alexander Pitkin</h1>
@@ -173,7 +174,7 @@ title: Curriculum vitae
 </dd>
 <dd>Flask
 </dd>
-<dd>SQLAlchemy/GeoAlchemy 2
+<dd>SQLAlchemy/GeoAlchemy 2/Alembic
 </dd>
 <dd>NodeJS
 </dd>
@@ -206,41 +207,30 @@ title: Curriculum vitae
 <dd>ElasticSearch
 </dd>
 <dt><strong>Project/Task Management Tools</strong>:</dt>
-<dd><p>Asana</p>
+<dd><p>JIRA</p>
+</dd>
+<dd>Asana
 </dd>
 <dd>Trello
-</dd>
-<dd>JIRA
 </dd>
 </dl>
 <h2 id="experience-10-years">Experience (10+ years)</h2>
 <p><strong>2017 - present iTechArt, Software Engineer</strong></p>
 <p>Senior fullstack developer</p>
 <p><strong>2014 - 2017 Nord-Soft, Python/Django developer</strong></p>
-<p>Creating and maintenance web sites using django. Creating web site API using <em>Django Rest Framework</em>, Database development Working with frontend (Javascript, JQuery, AngularJS/Angular2+, CSS/LESS)</p>
+<p>Creating and maintenance web sites using django. Creating web site API using <em>Django Rest Framework</em>, Database development Working with frontend (Javascript, JQuery, AngularJS/Angular, CSS/LESS)</p>
 <h2 id="projects">Projects</h2>
 <ol type="1">
 <li>Health and Wellness Assistant application
 <ul>
-<li><em>Stack</em>: Python, SQLAlchemy, AWS lambda, AWS, Alembic, pytest, Docker</li>
+<li><em>Stack</em>: Python, SQLAlchemy, AWS lambda, AWS services, DynamoDB, Amazon Rekognition, Alembic, pytest, Docker</li>
 <li><em>Role</em>: Senior Software Engineer</li>
 <li><em>Responsibilities</em>:
 <ul>
-<li>Develop API</li>
-<li>Test implementation</li>
+<li>Develop API based on AWS lambdas</li>
+<li>Design and develop system architecture</li>
+<li>Tests implementation</li>
 <li>Implement schedule service</li>
-</ul></li>
-</ul></li>
-<li>Real Estate Portal printing service - Project Web service to make pdf for a given URL description
-<ul>
-<li><em>Stack</em>: NodeJS, Express, Puppeteer, bull</li>
-<li><em>Role</em>: Senior Software Engineer</li>
-<li><em>Responsibilities</em>:
-<ul>
-<li>Developed express API</li>
-<li>Developed Puppeteer integration</li>
-<li>Developed Docker and CircleCI integration</li>
-<li>Added API tests and compare PDF tests</li>
 </ul></li>
 </ul></li>
 <li>Real Estate Portal API microservices - various API microservices for real estate portal
@@ -255,6 +245,18 @@ title: Curriculum vitae
 <li>Create complicated geospatial queries to fetch required data</li>
 <li>Develop backend packages to reuse in different microservices</li>
 <li>Setup service integration</li>
+</ul></li>
+</ul></li>
+<li>Real Estate Portal printing service - Project Web service to make pdf for a given URL description
+<ul>
+<li><em>Stack</em>: NodeJS, Express, Puppeteer, bull</li>
+<li><em>Role</em>: Senior Software Engineer</li>
+<li><em>Responsibilities</em>:
+<ul>
+<li>Developed express API</li>
+<li>Developed Puppeteer integration</li>
+<li>Developed Docker and CircleCI integration</li>
+<li>Added API tests and compare PDF tests</li>
 </ul></li>
 </ul></li>
 <li>Leading global eGift card platform with operations in Australia, North America, United Kingdom and New Zealand. Project aims to simplify and enhance the gift-giving experience by allowing users to purchase, send, and receive digital gift cards from a wide range of popular retailers and brands.
