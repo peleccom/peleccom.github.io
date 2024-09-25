@@ -12,7 +12,8 @@ Hello, my name is Alexander Pitkin (Александр Питкин).
 
 I am software engineer with more than 10+ years of experience.
 
-Contact me [pitkinalexander@gmail.com](pitkinalexander@gmail.com)
+Contact me [pitkinalexander@gmail.com](mailto:pitkinalexander@gmail.com)
+
 You can see my CV here [CV](/alexander_pitkin_cv.html).
 
 It also available as [PDF](/alexander_pitkin_cv.pdf).
