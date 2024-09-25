@@ -31,7 +31,7 @@ minima:
 
 header_pages:
   - projects.html
-  - alexander-pitkin-cv.html
+  - alexander_pitkin_cv.html
 
 # Build settings
 markdown: kramdown
