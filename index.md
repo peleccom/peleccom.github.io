@@ -10,7 +10,7 @@ title: Home
 
 Hello, my name is Alexander Pitkin (Александр Питкин).
 
-I am software engineer with more than 8 years of experience.
+I am software engineer with more than 10+ years of experience.
 
 
 You can see my CV here [CV](/alexander-pitkin-cv.html).
