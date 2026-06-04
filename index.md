@@ -10,7 +10,7 @@ title: Home
 
 Hello, my name is Alexander Pitkin (Александр Питкин).
 
-I am software engineer with more than 10+ years of experience.
+I am software engineer with more than 12+ years of experience.
 
 Contact me [pitkinalexander@gmail.com](mailto:pitkinalexander@gmail.com)
 
