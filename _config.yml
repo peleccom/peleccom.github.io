@@ -21,6 +21,9 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://peleccom.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 google_analytics: G-EPK3X1CQKB
 
+author: Alexander Pitkin
+copyright: Alexander Pitkin
+
 minima:
   social_links:
    github: peleccom
