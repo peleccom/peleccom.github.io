@@ -19,6 +19,8 @@ minimal_mistakes_skin: "default"
 google_analytics: G-EPK3X1CQKB
 
 search: true
+lunr:
+  search_within_pages: true
 
 markdown: kramdown
 plugins:
