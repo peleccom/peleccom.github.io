@@ -7,3 +7,5 @@ main:
     url: /skills/
   - title: "Pet Projects"
     url: /projects/
+  - title: "Blog"
+    url: /blog/
