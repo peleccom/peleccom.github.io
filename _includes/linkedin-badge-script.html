@@ -1,2 +1,15 @@
-<!-- LinkedIn badge widget script (renders profile badge in sidebar) -->
-<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
+<!-- LinkedIn badge widget script -->
+<script>
+(function() {
+  var s = document.createElement('script');
+  s.src = 'https://platform.linkedin.com/badges/js/profile.js';
+  s.async = true;
+  s.onload = function() {
+    // Render visible badge first
+    if (window.LIRenderAll) {
+      window.LIRenderAll();
+    }
+  };
+  document.head.appendChild(s);
+})();
+</script>

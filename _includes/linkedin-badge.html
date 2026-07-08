@@ -1,3 +1,3 @@
-<div style="display: flex; justify-content: flex-end;">
-  <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="dark" data-type="VERTICAL" data-vanity="alexander-pitkin-9b21a457" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://www.linkedin.com/in/alexander-pitkin-9b21a457?trk=profile-badge">Alexander Pitkin</a></div>
+<div class="{{ include.wrapper_class }}"{% if include.id %} id="{{ include.id }}"{% endif %}>
+  <div class="badge-base LI-profile-badge" data-locale="{{ include.locale | default: 'en_US' }}" data-size="{{ include.size | default: 'medium' }}" data-theme="dark" data-type="VERTICAL" data-vanity="alexander-pitkin-9b21a457" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://www.linkedin.com/in/alexander-pitkin-9b21a457?trk=profile-badge">Alexander Pitkin</a></div>
 </div>

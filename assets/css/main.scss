@@ -226,6 +226,7 @@ search: false
 }
 
 // LinkedIn badge in sidebar
+// LinkedIn badge in sidebar (hidden on mobile)
 .linkedin-badge-wrapper {
     white-space: normal;
     overflow: hidden;
@@ -233,18 +234,36 @@ search: false
     padding: 0;
 }
 
-// Mobile LinkedIn badge (hidden on desktop)
-.mobile-linkedin-badge {
+@media (max-width: 63.9375em) {
+    .linkedin-badge-wrapper {
+        display: none;
+    }
+}
+
+// LinkedIn badge at bottom of homepage (hidden on desktop)
+.linkedin-badge-bottom {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     margin-top: 1em;
     overflow: hidden;
     max-width: 100%;
 }
 
 @media (min-width: 64em) {
-    .mobile-linkedin-badge {
+    .linkedin-badge-bottom {
         display: none;
+    }
+}
+
+// More gap between sidebar and content on desktop
+@media (min-width: 64em) {
+    .page {
+        width: calc(100% - 200px - 1em);
+    }
+}
+@media (min-width: 80em) {
+    .page {
+        width: calc(100% - 300px - 1em);
     }
 }
 
