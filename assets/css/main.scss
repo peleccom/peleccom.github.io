@@ -107,8 +107,13 @@ search: false
 }
 
 .terminal__cursor {
+    display: none;
     color: var(--terminal-cursor, #f8f8f2);
     animation: blink 0.7s step-end infinite;
+}
+
+.terminal__cursor.active {
+    display: inline;
 }
 
 @keyframes blink {

@@ -3,7 +3,7 @@ prompt: ">"
 start_delay: 400
 between_lines_delay: 300
 after_output_delay: 200
-show_final_cursor: true
+show_final_cursor: false
 cursor_blink_speed: 500
 active_scheme: default
 schemes:

@@ -62,11 +62,12 @@
     function typeCmd(idx, charIdx) {
       if (idx > lastIdx) return;
       var line = lines[idx];
+      cursors[idx].classList.add('active');
       if (charIdx < line.cmd.length) {
         cmdEls[idx].textContent += line.cmd[charIdx];
         setTimeout(function() { typeCmd(idx, charIdx + 1); }, line.speed || 50);
       } else {
-        cursors[idx].style.display = 'none';
+        cursors[idx].classList.remove('active');
         setTimeout(function() { showOutput(idx); }, afterOutputDelay);
       }
     }
@@ -75,10 +76,13 @@
       outEls[idx].textContent = lines[idx].output;
       outEls[idx].classList.add('visible');
       if (idx < lastIdx) {
-        setTimeout(function() { typeCmd(idx + 1, 0); }, betweenLinesDelay);
+        setTimeout(function() {
+          cursors[idx + 1].classList.add('active');
+          typeCmd(idx + 1, 0);
+        }, betweenLinesDelay);
       } else if (cfg.show_final_cursor !== false) {
         var c = cursors[lastIdx];
-        c.style.display = 'inline-block';
+        c.classList.add('active');
         setInterval(function() {
           c.style.opacity = c.style.opacity === '0' ? '1' : '0';
         }, cfg.cursor_blink_speed || 500);
