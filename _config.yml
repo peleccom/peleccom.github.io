@@ -1,8 +1,17 @@
-title: Alexander Pitkin (@peleccom)
+title: "Alexander Pitkin (@peleccom)"
 description: >-
-  Alexander Pitkin. Software engineer, 2026
+  Senior Python Developer & Full Stack Engineer. Building scalable backend systems and AI/LLM-powered solutions with Python (FastAPI, Django) and TypeScript (React, Angular). 12+ years of experience in HealthTech, Real Estate, E-commerce, and FinTech.
 baseurl: ""
 url: "https://peleccom.github.io"
+og_image: /me.png
+twitter:
+  username: peleccom
+social:
+  name: "Alexander Pitkin"
+  links:
+    - "https://github.com/peleccom"
+    - "https://www.linkedin.com/in/alexander-pitkin-9b21a457"
+    - "https://t.me/peleccom"
 
 remote_theme: "mmistakes/minimal-mistakes@4.28.0"
 minimal_mistakes_skin: "default"
@@ -18,9 +27,9 @@ plugins:
   - jekyll-redirect-from
   - jekyll-include-cache
 
-webmaster_verifications:
-  yandex: 488b5d8930b870a1
-  bing: 5E29942831C03280C5D417374C5438B9
+google_site_verification:
+yandex_site_verification: 488b5d8930b870a1
+bing_site_verification: 5E29942831C03280C5D417374C5438B9
 
 author:
   name: "Alexander Pitkin"

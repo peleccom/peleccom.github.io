@@ -233,8 +233,19 @@ search: false
     padding: 0;
 }
 
-.sidebar {
-    overflow-x: hidden;
+// Mobile LinkedIn badge (hidden on desktop)
+.mobile-linkedin-badge {
+    display: flex;
+    justify-content: center;
+    margin-top: 1em;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+@media (min-width: 64em) {
+    .mobile-linkedin-badge {
+        display: none;
+    }
 }
 
 // Responsive
