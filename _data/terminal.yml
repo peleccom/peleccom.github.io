@@ -55,10 +55,10 @@ schemes:
 lines:
   - cmd: whoami
     output: Alexander Pitkin
-    speed: 30
+    speed: 80
   - cmd: cat role
     output: "Senior Python Developer | Senior Full Stack Engineer | FastAPI, Django | TypeScript, React, Angular | AI Engineer | LLM Applications"
-    speed: 8
+    speed: 80
   - cmd: cat stack
     output: "Python · TypeScript · FastAPI · Django · React · Angular"
-    speed: 20
+    speed: 80

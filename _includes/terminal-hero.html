@@ -15,7 +15,7 @@
   <div class="terminal__body">
     {% for line in site.data.terminal.lines %}
     <div class="terminal__line">
-      <span class="terminal__prompt">{{ site.data.terminal.prompt }}</span>
+      <span class="terminal__prompt" id="prompt{{ forloop.index0 }}">{{ site.data.terminal.prompt }}</span>
       <span class="terminal__cmd" id="cmd{{ forloop.index0 }}"></span><span class="terminal__cursor" id="cursor{{ forloop.index0 }}">▊</span>
     </div>
     <div class="terminal__line terminal__output" id="output{{ forloop.index0 }}"></div>
@@ -55,6 +55,7 @@
     var cmdEls = [{% for line in site.data.terminal.lines %}document.getElementById('cmd{{ forloop.index0 }}'),{% endfor %}];
     var outEls = [{% for line in site.data.terminal.lines %}document.getElementById('output{{ forloop.index0 }}'),{% endfor %}];
     var cursors = [{% for line in site.data.terminal.lines %}document.getElementById('cursor{{ forloop.index0 }}'),{% endfor %}];
+    var prompts = [{% for line in site.data.terminal.lines %}document.getElementById('prompt{{ forloop.index0 }}'),{% endfor %}];
     var lastIdx = lines.length - 1;
     var afterOutputDelay = cfg.after_output_delay || 200;
     var betweenLinesDelay = cfg.between_lines_delay || 300;
@@ -62,6 +63,7 @@
     function typeCmd(idx, charIdx) {
       if (idx > lastIdx) return;
       var line = lines[idx];
+      prompts[idx].classList.add('active');
       cursors[idx].classList.add('active');
       if (charIdx < line.cmd.length) {
         cmdEls[idx].textContent += line.cmd[charIdx];
