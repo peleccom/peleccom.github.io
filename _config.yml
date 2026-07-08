@@ -1,56 +1,83 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
-
-# Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
 title: Alexander Pitkin (@peleccom)
 email: pitkinalexander@gmail.com
-description: >- # this means to ignore newlines until "baseurl:"
+description: >-
   Alexander Pitkin. Software engineer, 2026
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://peleccom.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: ""
+url: "https://peleccom.github.io"
+
+remote_theme: "mmistakes/minimal-mistakes@4.28.0"
+minimal_mistakes_skin: "default"
+
 google_analytics: G-EPK3X1CQKB
-minima:
-  social_links:
-   github: peleccom
-   bitbucket: peleccom
-   telegram: peleccom
-   linkedin: alexander-pitkin-9b21a457
-   skype: peleccom
 
-header_pages:
-  - alexander_pitkin_cv.html
-  - projects.html
+search: true
 
-# Build settings
 markdown: kramdown
-theme: minima
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-redirect-from
+  - jekyll-include-cache
 
 webmaster_verifications:
   yandex: 488b5d8930b870a1
   bing: 5E29942831C03280C5D417374C5438B9
-# Exclude from processing.
-# The following items will not be processed, by default. Create a custom list
-# to override the default setting.
-# exclude:
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+
+author:
+  name: "Alexander Pitkin"
+  avatar: /me.png
+  bio: "Software engineer with 12+ years of experience"
+  location: "Minsk, Belarus"
+  email: pitkinalexander@gmail.com
+  links:
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope"
+      url: "mailto:pitkinalexander@gmail.com"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/peleccom"
+    - label: "Bitbucket"
+      icon: "fab fa-fw fa-bitbucket"
+      url: "https://bitbucket.org/peleccom"
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/alexander-pitkin-9b21a457"
+    - label: "Telegram"
+      icon: "fab fa-fw fa-telegram"
+      url: "https://t.me/peleccom"
+footer:
+  links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/peleccom"
+    - label: "Bitbucket"
+      icon: "fab fa-fw fa-bitbucket"
+      url: "https://bitbucket.org/peleccom"
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/alexander-pitkin-9b21a457"
+    - label: "Telegram"
+      icon: "fab fa-fw fa-telegram"
+      url: "https://t.me/peleccom"
+
+defaults:
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      author_profile: true
+  - scope:
+      path: "projects"
+    values:
+      layout: single
+      author_profile: true
+
+analytics:
+  provider: "google-gtag"
+  google:
+    tracking_id: "G-EPK3X1CQKB"
+    anonymize_ip: false
+
+atom_feed:
+  hide: true

@@ -1,12 +1,9 @@
-version: '3'
 services:
   jekyll:
-    command: jekyll serve --watch --force_polling --verbose
-    image: jekyll/jekyll:3.8
+    image: ruby:3.2
+    command: bash -c "gem install bundler -v 2.4.22 --no-document && bundle install && bundle exec jekyll serve --watch --force_polling --verbose --host 0.0.0.0"
     volumes:
       - .:/srv/jekyll
+    working_dir: /srv/jekyll
     ports:
       - 8000:4000
-    environment:
-      JEKYLL_UID: 1001
-      JEKYLL_GID: 1001

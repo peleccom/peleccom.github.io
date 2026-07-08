@@ -1,0 +1,7 @@
+main:
+  - title: "Home"
+    url: /
+  - title: "CV"
+    url: /alexander_pitkin_cv.html
+  - title: "Projects"
+    url: /projects/
