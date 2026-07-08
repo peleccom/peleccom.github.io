@@ -3,5 +3,7 @@ main:
     url: /
   - title: "CV"
     url: /alexander_pitkin_cv.html
+  - title: "Skills"
+    url: /skills/
   - title: "Projects"
     url: /projects/

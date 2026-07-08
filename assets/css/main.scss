@@ -1,0 +1,245 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+search: false
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
+@import "minimal-mistakes"; // main partials
+
+.app {
+    display: flex;
+    margin-bottom: 20px;
+}
+.app__icon {
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+}
+
+.app__title {
+    display: inline-block;
+    line-height: 32px;
+    margin: 0;
+    margin-left: 20px;
+}
+
+.section__title {
+    font-size: 1.5em;
+    margin: 2em 0 1em;
+    border-bottom: 2px solid $primary-color;
+    padding-bottom: 0.3em;
+}
+
+// Terminal Hero
+.terminal {
+    background: var(--terminal-bg, #1e1e1e);
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+    font-size: 0.9em;
+    margin-bottom: 2em;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.terminal__bar {
+    background: var(--terminal-bar-bg, #2d2d2d);
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+}
+
+.terminal__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    display: inline-block;
+}
+
+.terminal__dot--red { background: #ff5f56; }
+.terminal__dot--yellow { background: #ffbd2e; }
+.terminal__dot--green { background: #27c93f; }
+
+.terminal__title {
+    color: var(--terminal-title, #999);
+    font-size: 0.85em;
+    margin-left: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.terminal__scheme-select {
+    margin-left: auto;
+    background: transparent;
+    color: var(--terminal-title, #999);
+    border: 1px solid var(--terminal-title, #999);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.75em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    cursor: pointer;
+    outline: none;
+}
+
+.terminal__scheme-select option {
+    background: #2d2d2d;
+    color: #f8f8f2;
+}
+
+.terminal__body {
+    padding: 16px;
+    background: var(--terminal-bg, #1e1e1e);
+}
+
+.terminal__line {
+    margin-bottom: 4px;
+    min-height: 1.4em;
+}
+
+.terminal__prompt {
+    color: var(--terminal-prompt, #00ff00);
+    margin-right: 8px;
+}
+
+.terminal__cmd {
+    color: var(--terminal-cmd, #f8f8f2);
+}
+
+.terminal__cursor {
+    color: var(--terminal-cursor, #f8f8f2);
+    animation: blink 0.7s step-end infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+.terminal__output {
+    color: var(--terminal-output, #66d9ef);
+    padding-left: 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.terminal__output.visible {
+    opacity: 1;
+}
+
+// Skills Sections
+.skills-section {
+    margin-bottom: 1.5em;
+}
+
+.skills-section__title {
+    font-size: 0.9em;
+    color: #666;
+    margin: 0 0 0.6em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+// Tech Stack Grid
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 0;
+}
+
+.tech-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 8px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-size: 0.85em;
+    i {
+        font-size: 1.8em;
+        margin-bottom: 6px;
+        color: $primary-color;
+    }
+    span {
+        color: #555;
+    }
+}
+
+.tech-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+// Project Cards
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 2em;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px 16px;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    text-decoration: none;
+}
+
+.card__icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+}
+
+.card__title {
+    font-size: 1em;
+    margin: 0 0 8px;
+    color: #333;
+}
+
+.card__desc {
+    font-size: 0.85em;
+    color: #666;
+    margin: 0 0 12px;
+    line-height: 1.4;
+}
+
+.card__link {
+    font-size: 0.85em;
+    color: $primary-color;
+    font-weight: 600;
+}
+
+// LinkedIn badge in sidebar
+.linkedin-badge-wrapper {
+    white-space: normal;
+    overflow: hidden;
+    max-width: 100%;
+    padding: 0;
+}
+
+.sidebar {
+    overflow-x: hidden;
+}
+
+// Responsive
+@media (max-width: 600px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+}

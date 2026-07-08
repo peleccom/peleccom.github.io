@@ -1,5 +1,4 @@
 title: Alexander Pitkin (@peleccom)
-email: pitkinalexander@gmail.com
 description: >-
   Alexander Pitkin. Software engineer, 2026
 baseurl: ""
@@ -28,7 +27,6 @@ author:
   avatar: /me.png
   bio: "Software engineer with 12+ years of experience"
   location: "Minsk, Belarus"
-  email: pitkinalexander@gmail.com
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope"
@@ -45,6 +43,9 @@ author:
     - label: "Telegram"
       icon: "fab fa-fw fa-telegram"
       url: "https://t.me/peleccom"
+    - label: "CV"
+      icon: "fas fa-fw fa-file-lines"
+      url: "/alexander_pitkin_cv.html"
 footer:
   links:
     - label: "GitHub"
