@@ -16,6 +16,4 @@ Contact me [pitkinalexander@gmail.com](mailto:pitkinalexander@gmail.com)
 
 You can see my CV here [CV](/alexander_pitkin_cv.html).
 
-It also available as [PDF](/alexander_pitkin_cv.pdf).
-
 {% include linkedin-badge.html %}
