@@ -33,6 +33,9 @@
     - name: "Dart"
       icon: "dart"
       description: "Client-optimized, strongly typed language by Google used mainly with the Flutter framework for cross-platform apps."
+    - name: "DSA"
+      icon: "fas fa-diagram-project"
+      description: "Data Structures & Algorithms — fundamental computer science concepts including arrays, trees, graphs, sorting, searching, and dynamic programming for solving complex problems efficiently."
 
 - section: "Frameworks / Technology"
   items:
@@ -54,6 +57,9 @@
     - name: "Flask"
       icon: "flask-dark"
       description: "Lightweight Python micro-framework for building web apps and APIs with minimal boilerplate."
+    - name: "Huey"
+      icon: "fas fa-tasks"
+      description: "Lightweight Python task queue using Redis or filesystem for scheduling and executing background tasks asynchronously."
     - name: "SQLAlchemy / Alembic / GeoAlchemy"
       icon: "python"
       description: "Python SQL toolkit and ORM that maps Python objects to database tables; Alembic handles schema migrations and GeoAlchemy adds geospatial queries."
@@ -78,6 +84,9 @@
     - name: "Langchain/Langgraph"
       icon: "openai"
       description: "Frameworks for building LLM-powered apps, with LangGraph adding stateful, graph-based agent workflows."
+    - name: "System Design"
+      icon: "fas fa-sitemap"
+      description: "Practice of designing scalable, reliable, and maintainable distributed systems including microservices, databases, caching, load balancing, and API architecture."
 
 - section: "Systems"
   items:
