@@ -213,9 +213,7 @@
 
 - section: "Languages"
   items:
-    - name: "Russian — Native"
+    - name: "Russian"
       icon: "fas fa-language"
-      description: "First language with full native fluency in speaking, reading, and writing."
-    - name: "English — Upper-intermediate"
+    - name: "English"
       icon: "fas fa-language"
-      description: "Strong working proficiency in reading and writing, conversational with occasional minor gaps."
