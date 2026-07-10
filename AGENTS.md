@@ -7,7 +7,7 @@ Personal GitHub Pages site for Alexander Pitkin. Jekyll static site, Minimal Mis
 Ruby/Jekyll are NOT installed on the host. Everything runs in Docker.
 
 ```bash
-docker compose up -d          # start dev server at http://localhost:8000
+docker compose up -d          # start dev server at http://localhost:4000
 docker compose logs -f        # follow Jekyll rebuild logs
 docker compose restart         # restart after Gemfile changes
 ```
@@ -24,7 +24,6 @@ The container auto-rebuilds on file changes (`--watch --force_polling`).
 - **`_includes/`** — page-level includes: `tech-stack.html` (skills grid), `terminal-hero.html` (homepage), `project-cards.html` (hardcoded), `head/custom.html` (FA kit + favicons)
 - **`assets/css/main.scss`** — all custom styles. Imports Minimal Mistakes theme first, then overrides.
 - **CV page** (`alexander_pitkin_cv.html`) is a redirect to https://rxresu.me/peleccom/alexander-pitkin-cv
-- **Legacy** — `legacy/alexander_pitkin_cv.html` is a Pandoc-generated resume with `redirect_from: /cv.html`
 
 ## Icon system
 

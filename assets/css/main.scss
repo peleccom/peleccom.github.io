@@ -542,3 +542,8 @@ body.wide .page__content { max-width: none; }
     color: #2a7ae2;
   }
 }
+
+// Prevent sidebar from having its own scrollbar (LinkedIn badge overflows)
+.sidebar.sticky {
+  overflow-y: visible;
+}
