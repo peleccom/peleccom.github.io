@@ -1,6 +1,6 @@
 title: terminal
 prompt: ">"
-start_delay: 2000
+start_delay: 1700
 between_lines_delay: 300
 after_output_delay: 200
 show_final_cursor: false
