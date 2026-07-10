@@ -177,9 +177,129 @@ search: false
     }
 }
 
+.tech-item__icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.skill-modal__icon img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 8px;
+}
+
 .tech-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.tech-item {
+    cursor: pointer;
+    &:focus {
+        outline: 2px solid $primary-color;
+        outline-offset: 2px;
+    }
+}
+
+// Skills search box
+.skills-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 1.5em;
+    padding: 0 10px;
+    background: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    i {
+        color: #999;
+        font-size: 0.95em;
+    }
+    input {
+        flex: 1;
+        width: 100%;
+        margin: 0;
+        padding: 10px 4px;
+        border: none;
+        background: transparent;
+        font-size: 0.95em;
+        color: #333;
+        outline: none;
+        &::placeholder {
+            color: #999;
+        }
+    }
+}
+
+// Skill modal
+.skill-modal[hidden] {
+    display: none;
+}
+
+.skill-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.skill-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.skill-modal__card {
+    position: relative;
+    background: #fff;
+    max-width: 420px;
+    width: 100%;
+    padding: 28px 24px 24px;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+.skill-modal__close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    border: none;
+    background: transparent;
+    font-size: 1.6em;
+    line-height: 1;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    &:hover {
+        color: #333;
+    }
+}
+
+.skill-modal__icon {
+    display: block;
+    font-size: 3em;
+    color: $primary-color;
+    margin-bottom: 12px;
+}
+
+.skill-modal__title {
+    margin: 0 0 10px;
+    font-size: 1.3em;
+    color: #333;
+}
+
+.skill-modal__desc {
+    margin: 0;
+    font-size: 0.95em;
+    line-height: 1.5;
+    color: #666;
 }
 
 // Project Cards
