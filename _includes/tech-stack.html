@@ -1,27 +1,51 @@
-<div class="skills-search">
-  <i class="fas fa-magnifying-glass"></i>
-  <input type="text" id="skill-search" placeholder="Search skills..." aria-label="Search skills" autocomplete="off">
-</div>
+<div class="skills-layout">
+  <div class="skills-main">
+    <div class="skills-toolbar">
+      <div class="skills-search">
+        <i class="fas fa-magnifying-glass"></i>
+        <input type="text" id="skill-search" placeholder="Search skills..." aria-label="Search skills" autocomplete="off">
+      </div>
 
-{% for group in site.data.skills %}
-<section class="skills-section">
-  <h3 class="skills-section__title">{{ group.section }}</h3>
-  <div class="tech-grid">
-    {% for skill in group.items %}
-    <div class="tech-item" tabindex="0" role="button" data-icon="{{ skill.icon }}" data-description="{{ skill.description | escape }}">
-      {% if skill.icon contains "fa-" %}
-        <i class="{{ skill.icon }}"></i>
-      {% else %}
-        <img class="tech-item__icon" src="{{ site.developer_icons_cdn }}/{{ skill.icon }}.svg" alt="{{ skill.name }}" loading="lazy" width="40" height="40">
-      {% endif %}
-      <span>{{ skill.name }}</span>
+      <nav class="skills-categories" aria-label="Skill categories">
+        <button type="button" data-target="">All</button>
+        {% for group in site.data.skills %}
+        <button type="button" data-target="{{ group.section | slugify }}">{{ group.section }}</button>
+        {% endfor %}
+      </nav>
     </div>
+
+    {% for group in site.data.skills %}
+    <section class="skills-section" id="{{ group.section | slugify }}">
+      <h3 class="skills-section__title">{{ group.section }}</h3>
+      <div class="tech-grid">
+        {% for skill in group.items %}
+        <div class="tech-item" tabindex="0" role="button" data-icon="{{ skill.icon }}" data-description="{{ skill.description | escape }}">
+          {% if skill.icon contains "fa-" %}
+            <i class="{{ skill.icon }}"></i>
+          {% else %}
+            <img class="tech-item__icon" src="{{ site.developer_icons_cdn }}/{{ skill.icon }}.svg" alt="{{ skill.name }}" loading="lazy" width="40" height="40">
+          {% endif %}
+          <span>{{ skill.name | replace: '/', '/​' }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
     {% endfor %}
   </div>
-</section>
-{% endfor %}
 
-<div class="skill-modal" id="skill-modal" hidden>
+  <aside class="skills-toc" aria-label="Skills sections">
+    <nav class="skills-toc__nav">
+      <h4 class="skills-toc__title">Sections</h4>
+      <ul>
+        {% for group in site.data.skills %}
+        <li><button class="skills-toc__link" data-scroll-to="{{ group.section | slugify }}">{{ group.section }}</button></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </aside>
+</div>
+
+<div class="skill-modal" id="skill-modal">
   <div class="skill-modal__backdrop" data-close></div>
   <div class="skill-modal__card" role="dialog" aria-modal="true" aria-labelledby="skill-modal-title">
     <button class="skill-modal__close" data-close aria-label="Close">&times;</button>
@@ -58,11 +82,18 @@
     var desc = item.getAttribute('data-description') || '';
     modalDesc.textContent = desc;
     modalDesc.style.display = desc ? '' : 'none';
-    modal.hidden = false;
+    modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+    trackSkill(modalTitle.textContent);
+  }
+
+  function trackSkill(name) {
+    if (typeof gtag === 'function') {
+      gtag('event', 'skill_view', { skill: name });
+    }
   }
   function closeModal() {
-    modal.hidden = true;
+    modal.classList.remove('is-open');
     document.body.style.overflow = '';
   }
 
@@ -77,10 +108,11 @@
     el.addEventListener('click', closeModal);
   });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && !modal.hidden) closeModal();
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
   });
 
   if (search) {
+    var searchTimer;
     search.addEventListener('input', function () {
       var q = search.value.trim().toLowerCase();
       document.querySelectorAll('.skills-section').forEach(function (section) {
@@ -94,7 +126,42 @@
         });
         section.style.display = visible === 0 ? 'none' : '';
       });
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function () {
+        if (typeof gtag === 'function') {
+          gtag('event', 'search', { search_term: search.value.trim() });
+        }
+      }, 500);
     });
   }
+
+  function scrollToSection(slug) {
+    var sec = document.getElementById(slug);
+    if (!sec) return;
+    var toolbar = document.querySelector('.skills-toolbar');
+    var toolbarHeight = toolbar ? toolbar.offsetHeight : 0;
+    var rect = sec.getBoundingClientRect();
+    var scrollTarget = window.pageYOffset + rect.top - toolbarHeight - 10;
+    window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('.skills-toc__link').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var slug = btn.getAttribute('data-scroll-to');
+      scrollToSection(slug);
+    });
+  });
+
+  document.querySelectorAll('.skills-categories button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var slug = btn.getAttribute('data-target');
+      if (!slug) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      var sec = document.getElementById(slug);
+      if (sec) scrollToSection(slug);
+    });
+  });
 })();
 </script>

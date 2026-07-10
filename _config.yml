@@ -17,8 +17,6 @@ remote_theme: "mmistakes/minimal-mistakes@4.28.0"
 minimal_mistakes_skin: "default"
 developer_icons_cdn: "https://cdn.jsdelivr.net/gh/xandemon/developer-icons@v7.0.1/icons"
 
-google_analytics: G-EPK3X1CQKB
-
 search: true
 lunr:
   search_within_pages: true
