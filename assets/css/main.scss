@@ -390,7 +390,29 @@ search: false
     font-size: 0.85em;
     color: $primary-color;
     font-weight: 600;
-}
+  }
+
+  .card__tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+    margin-bottom: 8px;
+  }
+
+  .tech-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    opacity: 0.8;
+    transition: opacity 0.2s, transform 0.2s;
+    vertical-align: middle;
+
+    &:hover {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+  }
 
 // LinkedIn badge in sidebar
 // LinkedIn badge in sidebar (hidden on mobile)
