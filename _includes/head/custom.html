@@ -5,3 +5,23 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
+
+{% if site.minimal_mistakes_skin2 %}
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}" id="theme-light">
+  <link rel="alternate stylesheet" href="{{ '/assets/css/theme2.css' | relative_url }}" id="theme-dark">
+  <script>
+    (function() {
+      var theme = sessionStorage.getItem('theme');
+      var light = document.getElementById('theme-light');
+      var dark = document.getElementById('theme-dark');
+      if (theme === 'dark' && light && dark) {
+        light.rel = 'alternate stylesheet';
+        dark.rel = 'stylesheet';
+        document.documentElement.classList.add('theme-dark');
+      } else {
+        document.documentElement.classList.remove('theme-dark');
+      }
+    })();
+  </script>
+  <script src="{{ '/assets/js/theme-toggle.js' | relative_url }}"></script>
+{% endif %}
