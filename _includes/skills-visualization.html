@@ -1,0 +1,1284 @@
+<!-- ===============================================================
+     skills-visualization.html — Interactive 3D skills visualization
+     
+     Renders an interactive Three.js scene with skill sections as
+     orbiting node clusters around a central core. Data-driven via
+     site.data.skills and site.author.
+     
+     Usage: {% raw %}{% include skills-visualization.html %}{% endraw %}
+     =============================================================== -->
+
+<!-- ============================================================
+     STEP 1: Inject Jekyll data into JavaScript
+     ============================================================ -->
+<script>
+  window.SKILLS_3D = {
+    name: {{ site.author.name | jsonify }},
+    bio: "Senior Python Software Engineer",
+    groups: [
+      {% for group in site.data.skills %}
+      {
+        id: {{ group.section | slugify | jsonify }},
+        label: {{ group.section | jsonify }},
+        items: [
+          {% for skill in group.items %}
+          { name: {{ skill.name | jsonify }} }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  };
+</script>
+
+<!-- ============================================================
+     STEP 2: Styles
+     ============================================================ -->
+<style>
+  /* --- Container ------------------------------------------------- */
+  #skills-3d-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    background: #0a0a1a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      Oxygen, Ubuntu, Cantarell, sans-serif;
+    color: #fff;
+    user-select: none;
+  }
+
+  #skills-3d-container canvas {
+    display: block;
+  }
+
+  /* --- Info panel (top-left) ------------------------------------- */
+  #skills-3d-info {
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    z-index: 10;
+    opacity: 0;
+    animation: skills3dFadeIn 1s ease 0.5s forwards;
+    pointer-events: none;
+    max-width: 420px;
+  }
+
+  #skills-3d-info h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #f0f0ff 0%, #8888cc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  #skills-3d-info p {
+    margin: 8px 0 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.5;
+  }
+
+  /* --- Detail card (right, slides in) ---------------------------- */
+  #skills-3d-detail {
+    position: absolute;
+    top: 50%;
+    right: 32px;
+    transform: translateY(-50%) translateX(calc(100% + 32px));
+    z-index: 20;
+    background: rgba(20, 20, 40, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 28px 32px;
+    min-width: 240px;
+    max-width: 320px;
+    max-height: 70vh;
+    overflow-y: auto;
+    opacity: 0;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.4s ease;
+    pointer-events: none;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+  }
+
+  #skills-3d-detail.active {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #skills-3d-detail h3 {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  #skills-3d-detail .detail-count {
+    margin: 0 0 16px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  #skills-3d-detail .detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  #skills-3d-detail .detail-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 12px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85);
+    white-space: nowrap;
+  }
+
+  #skills-3d-detail .detail-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  #skills-3d-detail .detail-close:hover {
+    color: #fff;
+  }
+
+  /* --- Hint (bottom-center) -------------------------------------- */
+  #skills-3d-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.95), 0 0 3px rgba(0, 0, 0, 0.8);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: skills3dFadeIn 1s ease 2.5s forwards;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  /* --- Legend (bottom-right) ------------------------------------- */
+  #skills-3d-legend {
+    position: absolute;
+    bottom: 28px;
+    right: 32px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    opacity: 0;
+    animation: skills3dFadeIn 1s ease 1s forwards;
+  }
+
+  #skills-3d-legend .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  #skills-3d-legend .legend-row:hover {
+    opacity: 1 !important;
+  }
+
+  #skills-3d-legend .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  #skills-3d-legend .legend-label {
+    white-space: nowrap;
+  }
+
+  /* --- CSS2D label styles ---------------------------------------- */
+  .skills-3d-label {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 11px;
+    font-weight: 500;
+    text-shadow: 0 0 12px rgba(0, 0, 0, 0.9), 0 0 4px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+    white-space: nowrap;
+    line-height: 1.3;
+    transition: opacity 0.2s;
+  }
+
+  .skills-3d-label.group-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .skills-3d-label.skill-label {
+    font-size: 10px;
+    font-weight: 500;
+    opacity: 0.85;
+  }
+
+  /* --- Loading overlay ------------------------------------------- */
+  #skills-3d-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: #0a0a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+  }
+  #skills-3d-loading.hidden {
+    opacity: 0;
+  }
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(68, 136, 255, 0.15);
+    border-top-color: #4488ff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .loading-text {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 13px;
+    letter-spacing: 1px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  /* --- Reset button ---------------------------------------------- */
+  .reset-btn {
+    position: fixed;
+    bottom: 80px;
+    right: 50%;
+    transform: translateX(50%);
+    z-index: 30;
+    background: rgba(10, 15, 30, 0.7);
+    border: 1px solid rgba(100, 180, 255, 0.2);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    backdrop-filter: blur(8px);
+  }
+
+  .reset-btn:hover {
+    background: rgba(10, 15, 30, 0.9);
+    border-color: rgba(100, 180, 255, 0.5);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(100, 180, 255, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .reset-btn {
+      bottom: 120px;
+      right: auto;
+      left: 16px;
+      transform: none;
+    }
+  }
+
+  /* --- Keyframes ------------------------------------------------- */
+  @keyframes skills3dFadeIn {
+    to { opacity: 1; }
+  }
+
+  @keyframes skills3dSlideUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ================================================================
+     MOBILE (< 768px)
+     ================================================================ */
+  @media (max-width: 767px) {
+    #skills-3d-info {
+      top: 20px;
+      left: 20px;
+      max-width: 60vw;
+    }
+
+    #skills-3d-info h1 {
+      font-size: 20px;
+    }
+
+    #skills-3d-info p {
+      font-size: 12px;
+    }
+
+    /* Detail card moves to bottom */
+    #skills-3d-detail {
+      top: auto;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      transform: translateY(100%);
+      min-width: unset;
+      max-width: unset;
+      max-height: 45vh;
+      border-radius: 16px 16px 0 0;
+      padding: 24px 24px 28px;
+    }
+
+    #skills-3d-detail.active {
+      transform: translateY(0);
+    }
+
+    #skills-3d-hint {
+      bottom: 16px;
+      font-size: 11px;
+    }
+
+    #skills-3d-legend {
+      bottom: 48px;
+      right: 16px;
+      gap: 3px;
+    }
+
+    #skills-3d-legend .legend-row {
+      font-size: 10px;
+    }
+
+    #skills-3d-legend .legend-dot {
+      width: 6px;
+      height: 6px;
+    }
+  }
+
+  /* --- Scrollbar styling (detail card) --------------------------- */
+  #skills-3d-detail::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  #skills-3d-detail::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  #skills-3d-detail::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+  }
+</style>
+
+<!-- ============================================================
+     STEP 3: HTML Structure
+     ============================================================ -->
+<div id="skills-3d-container">
+  <!-- Three.js renders into this container via JS -->
+
+  <!-- Info panel (top-left) -->
+  <div id="skills-3d-info">
+    <h1 id="info-title"></h1>
+    <p id="info-bio"></p>
+  </div>
+
+  <!-- Detail card (right, slides in on group click) -->
+  <div id="skills-3d-detail">
+    <button class="detail-close" id="detail-close" aria-label="Close">&times;</button>
+    <h3 id="detail-title"></h3>
+    <p class="detail-count" id="detail-count"></p>
+    <div class="detail-tags" id="detail-tags"></div>
+  </div>
+
+  <!-- Hint (bottom-center) -->
+  <div id="skills-3d-hint">&#x1F5B1; DRAG TO ROTATE &nbsp;|&nbsp; SCROLL TO ZOOM &nbsp;|&nbsp; CLICK NODES</div>
+
+  <!-- Legend (bottom-right) — populated dynamically -->
+  <div id="skills-3d-legend"></div>
+
+  <!-- Reset view button -->
+  <button id="skills-3d-reset" class="reset-btn" title="Reset view">&#x27F2;</button>
+</div>
+
+<!-- Loading overlay — shown until Three.js is ready -->
+<div id="skills-3d-loading">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading 3D visualization&hellip;</div>
+</div>
+
+<!-- ============================================================
+     STEP 4: Three.js Import Map
+     ============================================================ -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<!-- ============================================================
+     STEP 5: Three.js Module Script
+     ============================================================ -->
+<script type="module">
+  // ------------------------------------------------------------------
+  // Imports
+  // ------------------------------------------------------------------
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+  import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+  import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+  import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+  import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+  import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+  import { RGBShiftShader } from 'three/addons/shaders/RGBShiftShader.js';
+
+  // ------------------------------------------------------------------
+  // Constants
+  // ------------------------------------------------------------------
+  const GROUP_COLORS = [
+    '#FFD700',  // Language / Programming
+    '#00D2FF',  // Frameworks / Technology
+    '#FF6B6B',  // Systems
+    '#FF9100',  // Cloud & CI/CD
+    '#00E676',  // Databases / Message brokers
+    '#FF4081',  // Project / Task Management
+    '#7B2FBE',  // AI dev tools
+    '#8BE9FD',  // Languages
+  ];
+
+  const GROUP_RADIUS = 4.5;
+  const ITEM_ORBIT_RADIUS = 1.2;
+  const STAR_COUNT = 1500;
+  const STAR_FIELD_RADIUS = 80;
+
+  // ------------------------------------------------------------------
+  // Data Preparation
+  // ------------------------------------------------------------------
+  const data = window.SKILLS_3D;
+  if (!data || !data.groups || data.groups.length === 0) {
+    // No data — render nothing
+    const el = document.getElementById('skills-3d-container');
+    if (el) {
+      el.innerHTML =
+        '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:rgba(255,255,255,0.3);font-family:sans-serif;">No skills data available.</div>';
+    }
+    throw new Error('SKILLS_3D data is empty or missing');
+  }
+
+  // Assign colors (cycle if more groups than colors)
+  data.groups.forEach((group, i) => {
+    group.color = GROUP_COLORS[i % GROUP_COLORS.length];
+  });
+
+  // Populate info panel
+  document.getElementById('info-title').textContent = data.name || '';
+  document.getElementById('info-bio').textContent = data.bio || '';
+
+  // Build legend
+  const legendEl = document.getElementById('skills-3d-legend');
+  data.groups.forEach((group, idx) => {
+    const row = document.createElement('div');
+    row.className = 'legend-row';
+    row.setAttribute('data-group-index', idx);
+    const dot = document.createElement('span');
+    dot.className = 'legend-dot';
+    dot.style.background = group.color;
+    const label = document.createElement('span');
+    label.className = 'legend-label';
+    label.textContent = group.label;
+    row.appendChild(dot);
+    row.appendChild(label);
+    row.addEventListener('click', () => focusOnGroup(idx));
+    legendEl.appendChild(row);
+  });
+
+  // Calculate Fibonacci sphere positions
+  function fibonacciSphere(count, radius) {
+    if (count === 0) return [];
+    if (count === 1) return [{ x: 0, y: 0, z: 0 }];
+    const positions = [];
+    const phi = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < count; i++) {
+      const y = 1 - (i / (count - 1)) * 2;
+      const rAtY = Math.sqrt(1 - y * y);
+      const theta = phi * i;
+      positions.push({
+        x: Math.cos(theta) * rAtY * radius,
+        y: y * radius,
+        z: Math.sin(theta) * rAtY * radius,
+      });
+    }
+    return positions;
+  }
+
+  // Assign group positions
+  const groupPositions = fibonacciSphere(data.groups.length, GROUP_RADIUS);
+  data.groups.forEach((group, i) => {
+    group.pos = groupPositions[i];
+  });
+
+  // Assign item positions around each group
+  data.groups.forEach((group) => {
+    const count = group.items.length;
+    const itemPositions = fibonacciSphere(count, ITEM_ORBIT_RADIUS);
+    group.items.forEach((item, j) => {
+      item.pos = itemPositions[j];
+    });
+  });
+
+  // ------------------------------------------------------------------
+  // DOM references
+  // ------------------------------------------------------------------
+  const container = document.getElementById('skills-3d-container');
+
+  // ------------------------------------------------------------------
+  // Scene Setup
+  // ------------------------------------------------------------------
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0a0a1a);
+
+  const camera = new THREE.PerspectiveCamera(
+    55,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    200
+  );
+  camera.position.set(0, 2, 9);
+  camera.lookAt(0, 0, 0);
+
+  // --- WebGL Renderer ---
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    powerPreference: 'high-performance',
+  });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.2;
+  renderer.domElement.style.position = 'absolute';
+  renderer.domElement.style.top = '0';
+  renderer.domElement.style.left = '0';
+  container.appendChild(renderer.domElement);
+
+  // --- CSS2D Renderer ---
+  const labelRenderer = new CSS2DRenderer();
+  labelRenderer.setSize(window.innerWidth, window.innerHeight);
+  labelRenderer.domElement.style.position = 'absolute';
+  labelRenderer.domElement.style.top = '0';
+  labelRenderer.domElement.style.left = '0';
+  labelRenderer.domElement.style.pointerEvents = 'none';
+  labelRenderer.domElement.style.zIndex = '2';
+  container.appendChild(labelRenderer.domElement);
+
+  // ------------------------------------------------------------------
+  // Controls
+  // ------------------------------------------------------------------
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.015;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.minDistance = 2.5;
+  controls.maxDistance = 20;
+  controls.target.set(0, 0, 0);
+
+  // Stop auto-rotate on user interaction
+  controls.addEventListener('start', () => {
+    controls.autoRotate = false;
+  });
+
+  // Resume auto-rotate after 4s of inactivity
+  let autoRotateTimer = null;
+  controls.addEventListener('end', () => {
+    if (autoRotateTimer) clearTimeout(autoRotateTimer);
+    autoRotateTimer = setTimeout(() => {
+      controls.autoRotate = true;
+    }, 4000);
+  });
+
+  // ============ CAMERA ANIMATION UTILITY ============
+  let cameraAnim = null;
+
+  function animateCameraTo(endPos, endTarget, duration = 0.8) {
+    if (cameraAnim) return; // already animating
+    cameraAnim = {
+      startPos: camera.position.clone(),
+      endPos: endPos.clone(),
+      startTarget: controls.target.clone(),
+      endTarget: endTarget.clone(),
+      progress: 0,
+      duration: duration
+    };
+    controls.autoRotate = false;
+  }
+
+  function resetCameraView() {
+    animateCameraTo(
+      new THREE.Vector3(0, 2, 9),
+      new THREE.Vector3(0, 0, 0),
+      0.8
+    );
+  }
+
+  function focusOnGroup(index) {
+    const mesh = groupMeshes[index];
+    if (!mesh) return;
+
+    const pos = mesh.position.clone();
+    const dir = pos.clone().normalize();
+    const camPos = pos.clone().add(dir.multiplyScalar(3.0));
+
+    showDetailCard(index);
+    animateCameraTo(camPos, pos, 0.8);
+  }
+
+  // ------------------------------------------------------------------
+  // Post-processing
+  // ------------------------------------------------------------------
+  const composer = new EffectComposer(renderer);
+  const renderPass = new RenderPass(scene, camera);
+  composer.addPass(renderPass);
+
+  const bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight),
+    0.5,   // strength
+    0.3,   // radius
+    0.1    // threshold
+  );
+  composer.addPass(bloomPass);
+
+  const rgbShiftPass = new ShaderPass(RGBShiftShader);
+  rgbShiftPass.uniforms['amount'].value = 0.0015;
+  composer.addPass(rgbShiftPass);
+
+  // Ensure RGB shift output is written to screen
+  rgbShiftPass.renderToScreen = true;
+
+  // ------------------------------------------------------------------
+  // Lighting
+  // ------------------------------------------------------------------
+  const ambientLight = new THREE.AmbientLight(0x404060, 0.5);
+  scene.add(ambientLight);
+
+  const light1 = new THREE.PointLight(0x8888ff, 1.5, 20);
+  light1.position.set(5, 5, 5);
+  scene.add(light1);
+
+  const light2 = new THREE.PointLight(0xff6688, 0.8, 20);
+  light2.position.set(-5, -3, 4);
+  scene.add(light2);
+
+  const light3 = new THREE.PointLight(0x44ddff, 0.6, 20);
+  light3.position.set(3, -5, -5);
+  scene.add(light3);
+
+  // ------------------------------------------------------------------
+  // Helper: create glow sprite texture
+  // ------------------------------------------------------------------
+  function createGlowTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 128;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    gradient.addColorStop(0, 'rgba(255,255,255,1)');
+    gradient.addColorStop(0.15, 'rgba(255,255,255,0.9)');
+    gradient.addColorStop(0.4, 'rgba(255,255,255,0.4)');
+    gradient.addColorStop(0.7, 'rgba(255,255,255,0.1)');
+    gradient.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(canvas);
+  }
+
+  const glowTexture = createGlowTexture();
+
+  // ------------------------------------------------------------------
+  // Starfield
+  // ------------------------------------------------------------------
+  const starGeo = new THREE.BufferGeometry();
+  const starPositions = new Float32Array(STAR_COUNT * 3);
+  const starColors = new Float32Array(STAR_COUNT * 3);
+
+  const starColorPalette = [
+    new THREE.Color(0xffffff),
+    new THREE.Color(0xffeedd),
+    new THREE.Color(0xddddff),
+    new THREE.Color(0xffddbb),
+    new THREE.Color(0xccddff),
+  ];
+
+  for (let i = 0; i < STAR_COUNT; i++) {
+    const radius = STAR_FIELD_RADIUS * Math.cbrt(Math.random());
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    starPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+    starPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+    starPositions[i * 3 + 2] = radius * Math.cos(phi);
+
+    const col = starColorPalette[Math.floor(Math.random() * starColorPalette.length)];
+    starColors[i * 3] = col.r;
+    starColors[i * 3 + 1] = col.g;
+    starColors[i * 3 + 2] = col.b;
+  }
+
+  starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+  starGeo.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+
+  const starMat = new THREE.PointsMaterial({
+    size: 0.12,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.9,
+    blending: THREE.AdditiveBlending,
+    sizeAttenuation: true,
+    depthWrite: false,
+  });
+
+  const stars = new THREE.Points(starGeo, starMat);
+  scene.add(stars);
+
+  // ------------------------------------------------------------------
+  // Core (icosahedron + glow)
+  // ------------------------------------------------------------------
+
+  // Core glow sprite
+  const coreGlowMat = new THREE.SpriteMaterial({
+    map: glowTexture,
+    color: 0x4488ff,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    opacity: 0.6,
+  });
+  const coreGlow = new THREE.Sprite(coreGlowMat);
+  coreGlow.scale.set(3.0, 3.0, 1);
+  scene.add(coreGlow);
+
+  // Icosahedron core
+  const coreGeo = new THREE.IcosahedronGeometry(0.5, 1);
+  const coreMat = new THREE.MeshStandardMaterial({
+    color: 0x4488ff,
+    emissive: 0x4488ff,
+    emissiveIntensity: 0.4,
+    metalness: 0.3,
+    roughness: 0.2,
+  });
+  const core = new THREE.Mesh(coreGeo, coreMat);
+  scene.add(core);
+
+  // Rotating torus rings around core
+  const rings = [];
+  const ringConfigs = [
+    { radius: 0.8, tube: 0.015, rotX: 0, rotY: 0, speed: 0.6, color: 0x4488ff },
+    { radius: 1.0, tube: 0.012, rotX: Math.PI / 3, rotY: Math.PI / 4, speed: -0.4, color: 0x66aaff },
+    { radius: 1.2, tube: 0.01, rotX: -Math.PI / 4, rotY: Math.PI / 3, speed: 0.5, color: 0x8866ff },
+  ];
+
+  ringConfigs.forEach((cfg) => {
+    const geo = new THREE.TorusGeometry(cfg.radius, cfg.tube, 16, 80);
+    const mat = new THREE.MeshBasicMaterial({
+      color: cfg.color,
+      transparent: true,
+      opacity: 0.2,
+      side: THREE.DoubleSide,
+    });
+    const ring = new THREE.Mesh(geo, mat);
+    ring.rotation.x = cfg.rotX;
+    ring.rotation.y = cfg.rotY;
+    ring.userData = { speed: cfg.speed };
+    scene.add(ring);
+    rings.push(ring);
+  });
+
+  // ------------------------------------------------------------------
+  // Group nodes
+  // ------------------------------------------------------------------
+  const groupMeshes = [];
+  const groupGlows = [];
+  const groupLabels = [];
+  const connectionLines = [];
+
+  data.groups.forEach((group) => {
+    const pos = new THREE.Vector3(group.pos.x, group.pos.y, group.pos.z);
+    const color = new THREE.Color(group.color);
+
+    // Sphere
+    const sphereGeo = new THREE.SphereGeometry(0.28, 20, 20);
+    const sphereMat = new THREE.MeshStandardMaterial({
+      color: color,
+      emissive: color,
+      emissiveIntensity: 0.3,
+      metalness: 0.4,
+      roughness: 0.3,
+    });
+    const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+    sphere.position.copy(pos);
+    sphere.userData.isGroup = true;
+    sphere.userData.groupIndex = data.groups.indexOf(group);
+    sphere.userData.baseScale = 1;
+    scene.add(sphere);
+    groupMeshes.push(sphere);
+
+    // Glow sprite
+    const glowMat = new THREE.SpriteMaterial({
+      map: glowTexture,
+      color: color,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      opacity: 0.5,
+    });
+    const glow = new THREE.Sprite(glowMat);
+    glow.position.copy(pos);
+    glow.scale.set(1.6, 1.6, 1);
+    scene.add(glow);
+    groupGlows.push(glow);
+
+    // CSS2D label
+    const labelDiv = document.createElement('div');
+    labelDiv.className = 'skills-3d-label group-label';
+    labelDiv.textContent = group.label;
+    labelDiv.style.color = group.color;
+    const label = new CSS2DObject(labelDiv);
+    label.position.set(pos.x, pos.y - 0.55, pos.z);
+    scene.add(label);
+    groupLabels.push(label);
+
+    // Connection line: core → group
+    const lineGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(0, 0, 0),
+      pos,
+    ]);
+    const lineMat = new THREE.LineBasicMaterial({
+      color: color,
+      transparent: true,
+      opacity: 0.35,
+    });
+    const line = new THREE.Line(lineGeo, lineMat);
+    line.userData = { phase: Math.random() * Math.PI * 2 };
+    scene.add(line);
+    connectionLines.push(line);
+  });
+
+  // ------------------------------------------------------------------
+  // Skill nodes
+  // ------------------------------------------------------------------
+  const skillMeshes = [];
+  const skillLabels = [];
+  const skillGlows = [];
+  const itemConnectionLines = [];
+
+  data.groups.forEach((group, gIdx) => {
+    const groupPos = new THREE.Vector3(group.pos.x, group.pos.y, group.pos.z);
+    const color = new THREE.Color(group.color);
+
+    group.items.forEach((item, idx) => {
+      // Initial local position (relative to group center)
+      const localPos = new THREE.Vector3(item.pos.x, item.pos.y, item.pos.z);
+      const worldPos = groupPos.clone().add(localPos);
+
+      // Small sphere
+      const geo = new THREE.SphereGeometry(0.12, 20, 20);
+      const mat = new THREE.MeshStandardMaterial({
+        color: color,
+        emissive: color,
+        emissiveIntensity: 0.6,
+        roughness: 0.3,
+        metalness: 0.4,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.copy(worldPos);
+      mesh.userData.phase = Math.random() * Math.PI * 2;
+      mesh.userData.groupIndex = gIdx;
+      mesh.userData.initialLocalPos = localPos.clone();
+      mesh.userData.orbitSpeed = 0.08 + Math.random() * 0.08;
+      mesh.userData.orbitAngle = Math.random() * Math.PI * 2;
+      mesh.userData.pulseOffset = (idx / group.items.length) * Math.PI * 2;
+      scene.add(mesh);
+      skillMeshes.push(mesh);
+
+      // Glow sprite
+      const skillGlowMat = new THREE.SpriteMaterial({
+        map: glowTexture,
+        color: color,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        opacity: 0.3,
+        depthWrite: false,
+      });
+      const skillGlow = new THREE.Sprite(skillGlowMat);
+      skillGlow.position.copy(worldPos);
+      skillGlow.scale.set(0.5, 0.5, 1);
+      scene.add(skillGlow);
+      skillGlows.push(skillGlow);
+
+      // CSS2D label
+      const labelDiv = document.createElement('div');
+      labelDiv.className = 'skills-3d-label skill-label';
+      labelDiv.textContent = item.name;
+      const label = new CSS2DObject(labelDiv);
+      label.position.set(worldPos.x, worldPos.y - 0.2, worldPos.z);
+      scene.add(label);
+      skillLabels.push(label);
+
+      // Connection line: group → item
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([
+        groupPos,
+        worldPos,
+      ]);
+      const lineMat = new THREE.LineBasicMaterial({
+        color: color,
+        transparent: true,
+        opacity: 0.25,
+      });
+      const line = new THREE.Line(lineGeo, lineMat);
+      line.userData = {
+        phase: (idx / group.items.length) * Math.PI * 2,
+      };
+      scene.add(line);
+      itemConnectionLines.push(line);
+    });
+  });
+
+  // ------------------------------------------------------------------
+  // Raycaster for click + hover
+  // ------------------------------------------------------------------
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+
+  let hoveredGroup = null;
+  let selectedGroupIndex = -1;
+
+  function getClickableMeshes() {
+    return groupMeshes;
+  }
+
+  function hitTest(event) {
+    const rect = renderer.domElement.getBoundingClientRect();
+    pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
+    return raycaster.intersectObjects(getClickableMeshes());
+  }
+
+  // --- Click handler ---
+  renderer.domElement.addEventListener('click', (event) => {
+    const hits = hitTest(event);
+    if (hits.length > 0) {
+      const hit = hits[0].object;
+      if (hit.userData.isGroup) {
+        const idx = hit.userData.groupIndex;
+        showDetailCard(idx);
+        return;
+      }
+    }
+    hideDetailCard();
+  });
+
+  // --- Hover handler ---
+  renderer.domElement.addEventListener('pointermove', (event) => {
+    const hits = hitTest(event);
+    let newHovered = null;
+    if (hits.length > 0) {
+      const hit = hits[0].object;
+      if (hit.userData.isGroup) {
+        newHovered = hit;
+      }
+    }
+
+    if (newHovered !== hoveredGroup) {
+      // Un-hover previous
+      if (hoveredGroup) {
+        const idx = hoveredGroup.userData.groupIndex;
+        const glow = groupGlows[idx];
+        hoveredGroup.scale.set(1, 1, 1);
+        if (glow) glow.scale.set(1.6, 1.6, 1);
+        hoveredGroup.material.emissiveIntensity = 0.3;
+      }
+
+      hoveredGroup = newHovered;
+
+      // Hover new
+      if (hoveredGroup) {
+        const idx = hoveredGroup.userData.groupIndex;
+        const glow = groupGlows[idx];
+        hoveredGroup.scale.set(1.3, 1.3, 1.3);
+        if (glow) glow.scale.set(2.4, 2.4, 1);
+        hoveredGroup.material.emissiveIntensity = 0.8;
+        renderer.domElement.style.cursor = 'pointer';
+      } else {
+        renderer.domElement.style.cursor = 'default';
+      }
+    }
+  });
+
+  // --- Detail card ---
+  const detailEl = document.getElementById('skills-3d-detail');
+  const detailTitle = document.getElementById('detail-title');
+  const detailCount = document.getElementById('detail-count');
+  const detailTags = document.getElementById('detail-tags');
+  const detailClose = document.getElementById('detail-close');
+
+  function showDetailCard(groupIndex) {
+    const group = data.groups[groupIndex];
+    if (!group) return;
+
+    selectedGroupIndex = groupIndex;
+    detailTitle.textContent = group.label;
+    detailTitle.style.color = group.color;
+
+    const count = group.items.length;
+    detailCount.textContent = count + ' skill' + (count !== 1 ? 's' : '');
+
+    detailTags.innerHTML = '';
+    group.items.forEach((item) => {
+      const tag = document.createElement('span');
+      tag.className = 'detail-tag';
+      tag.textContent = item.name;
+      detailTags.appendChild(tag);
+    });
+
+    detailEl.classList.add('active');
+  }
+
+  function hideDetailCard() {
+    detailEl.classList.remove('active');
+    selectedGroupIndex = -1;
+  }
+
+  detailClose.addEventListener('click', hideDetailCard);
+
+  // --- Reset view button ---
+  document.getElementById('skills-3d-reset').addEventListener('click', resetCameraView);
+
+  // --- Click on empty space: listen on document ---
+  document.addEventListener('click', (event) => {
+    // If click target is not inside the detail card or on the canvas
+    const target = event.target;
+    if (detailEl.classList.contains('active')) {
+      // Check if click was inside the detail card
+      if (detailEl.contains(target)) return;
+      // Check if click was on the canvas
+      if (renderer.domElement.contains(target)) {
+        // Let the canvas click handler decide
+        return;
+      }
+      hideDetailCard();
+    }
+  });
+
+  // ------------------------------------------------------------------
+  // Animation Loop
+  // ------------------------------------------------------------------
+  const clock = new THREE.Clock();
+
+  function animate() {
+    // Hide loading overlay on first frame
+    const loadingEl = document.getElementById('skills-3d-loading');
+    if (loadingEl) loadingEl.classList.add('hidden');
+
+    requestAnimationFrame(animate);
+
+    const delta = Math.min(clock.getDelta(), 0.05);
+    const elapsed = clock.elapsedTime;
+
+    // --- Stars: twinkle (subtle overall pulse) + rotation ---
+    starMat.opacity = 0.85 + Math.sin(elapsed * 0.15) * 0.1;
+    stars.rotation.y = elapsed * 0.004;
+    stars.rotation.x = Math.sin(elapsed * 0.0015) * 0.01;
+
+    // --- Core glow animation ---
+    const glowPulse = 0.5 + Math.sin(elapsed * 1.2) * 0.15;
+    coreGlow.material.opacity = glowPulse;
+    const glowScale = 2.8 + Math.sin(elapsed * 0.8) * 0.3;
+    coreGlow.scale.set(glowScale, glowScale, 1);
+
+    // --- Core rotation ---
+    core.rotation.x += delta * 0.15;
+    core.rotation.y += delta * 0.25;
+
+    // --- Core scale pulse ---
+    const corePulse = 1 + Math.sin(elapsed * 1.5) * 0.05;
+    core.scale.setScalar(corePulse);
+
+    // --- Core emissive pulse ---
+    core.material.emissiveIntensity = 0.3 + Math.sin(elapsed * 2) * 0.15;
+
+    // --- Rings ---
+    rings.forEach((ring) => {
+      ring.rotation.x += 0.003 * ring.userData.speed;
+      ring.rotation.y += 0.005 * ring.userData.speed;
+      ring.material.opacity = 0.15 + Math.sin(elapsed * 0.4 + ring.userData.speed) * 0.1;
+    });
+
+    // --- Group nodes: gentle float ---
+    groupMeshes.forEach((mesh, i) => {
+      const offset = i * 0.8;
+      const floatY = Math.sin(elapsed * 0.3 + offset) * 0.03;
+      const basePos = data.groups[i].pos;
+      mesh.position.y = basePos.y + floatY;
+
+      // Move glow with mesh
+      if (groupGlows[i]) {
+        groupGlows[i].position.y = basePos.y + floatY;
+      }
+      // Move label with mesh
+      if (groupLabels[i]) {
+        groupLabels[i].position.y = basePos.y + floatY - 0.55;
+      }
+
+      // Update connection line from core to group
+      const line = connectionLines[i];
+      if (line) {
+        const positions = line.geometry.attributes.position;
+        positions.setXYZ(1, basePos.x, basePos.y + floatY, basePos.z);
+        positions.needsUpdate = true;
+        // Pulse opacity
+        line.material.opacity = 0.25 + Math.sin(elapsed * 0.5 + line.userData.phase) * 0.15;
+      }
+    });
+
+    // --- Skill nodes: pulse & orbit around their group ---
+    skillMeshes.forEach((mesh, idx) => {
+      const gIdx = mesh.userData.groupIndex;
+      const group = data.groups[gIdx];
+
+      // Pulse
+      const pulse = 1 + Math.sin(elapsed * 1.2 + mesh.userData.pulseOffset) * 0.2;
+      mesh.scale.set(pulse, pulse, pulse);
+
+      // Orbit
+      const localPos = mesh.userData.initialLocalPos;
+      const angle = elapsed * mesh.userData.orbitSpeed + mesh.userData.orbitAngle;
+      const cosA = Math.cos(angle);
+      const sinA = Math.sin(angle);
+      const rx = localPos.x * cosA - localPos.z * sinA;
+      const rz = localPos.x * sinA + localPos.z * cosA;
+
+      // Group float offset
+      const floatY = Math.sin(elapsed * 0.3 + gIdx * 0.8) * 0.03;
+
+      const wx = group.pos.x + rx;
+      const wy = group.pos.y + floatY + localPos.y;
+      const wz = group.pos.z + rz;
+
+      mesh.position.set(wx, wy, wz);
+
+      // Move corresponding glow sprite
+      const glow = skillGlows[idx];
+      if (glow) {
+        glow.position.set(wx, wy, wz);
+      }
+
+      // Move corresponding CSS2D label
+      const label = skillLabels[idx];
+      if (label) {
+        label.position.set(wx, wy - 0.2, wz);
+      }
+
+      // Update corresponding connection line (group → item)
+      const line = itemConnectionLines[idx];
+      if (line) {
+        const positions = line.geometry.attributes.position;
+        // Line start = group center (adjusted for float)
+        positions.setXYZ(0, group.pos.x, group.pos.y + floatY, group.pos.z);
+        // Line end = item world position
+        positions.setXYZ(1, wx, wy, wz);
+        positions.needsUpdate = true;
+        // Pulse opacity
+        line.material.opacity = 0.15 + Math.sin(elapsed * 0.8 + line.userData.phase) * 0.1;
+      }
+    });
+
+    // --- Camera animation ---
+    if (cameraAnim) {
+      cameraAnim.progress += delta;
+      const t = Math.min(cameraAnim.progress / cameraAnim.duration, 1);
+      // easeInOutQuad
+      const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+
+      camera.position.lerpVectors(cameraAnim.startPos, cameraAnim.endPos, ease);
+      controls.target.lerpVectors(cameraAnim.startTarget, cameraAnim.endTarget, ease);
+
+      if (t >= 1) {
+        camera.position.copy(cameraAnim.endPos);
+        controls.target.copy(cameraAnim.endTarget);
+        cameraAnim = null;
+        controls.autoRotate = true;
+      }
+    }
+
+    // --- Controls ---
+    controls.update();
+
+    // --- Render ---
+    composer.render();
+
+    // --- CSS2D render on top ---
+    labelRenderer.render(scene, camera);
+  }
+
+  animate();
+
+  // ------------------------------------------------------------------
+  // Resize Handler
+  // ------------------------------------------------------------------
+  function onResize() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(width, height);
+    composer.setSize(width, height);
+    labelRenderer.setSize(width, height);
+
+    bloomPass.resolution.set(width, height);
+  }
+
+  window.addEventListener('resize', onResize);
+
+  // ------------------------------------------------------------------
+  // Cleanup on disconnect (defensive)
+  // ------------------------------------------------------------------
+  // If the DOM element is removed, stop rendering
+  const observer = new MutationObserver(() => {
+    if (!document.body.contains(container)) {
+      observer.disconnect();
+      renderer.dispose();
+      labelRenderer.domElement.remove();
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+</script>
