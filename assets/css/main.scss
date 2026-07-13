@@ -583,7 +583,12 @@ body.wide .page__content { max-width: none; }
       color: var(--masthead-link-color-hover, var(--primary-color, #00adb5)) !important;
     }
   }
-  
+}
+
+.greedy-nav .navicon,
+.greedy-nav .navicon::before,
+.greedy-nav .navicon::after {
+  background: currentColor;
 }
 
 // Ensure search form input works in dark mode
