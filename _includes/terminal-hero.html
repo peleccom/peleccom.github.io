@@ -1,11 +1,14 @@
 {% assign active = site.data.terminal.active_scheme | default: "default" %}
 {% assign tc = site.data.terminal.schemes[active] %}
-<div class="terminal" id="terminal" style="--terminal-bg: {{ tc.background }}; --terminal-bar-bg: {{ tc.bar_background }}; --terminal-text: {{ tc.text }}; --terminal-prompt: {{ tc.prompt }}; --terminal-cmd: {{ tc.cmd }}; --terminal-output: {{ tc.output }}; --terminal-cursor: {{ tc.cursor }}; --terminal-title: {{ tc.title }};">
+{% assign cfg = site.data.terminal %}
+
+<div class="terminal" id="terminal"
+     style="--terminal-bg: {{ tc.background }}; --terminal-bar-bg: {{ tc.bar_background }}; --terminal-text: {{ tc.text }}; --terminal-prompt: {{ tc.prompt }}; --terminal-output: {{ tc.output }}; --terminal-cmd: {{ tc.cmd }}; --terminal-cursor: {{ tc.cursor }}; --terminal-title: {{ tc.title }};">
   <div class="terminal__bar">
     <span class="terminal__dot terminal__dot--red"></span>
     <span class="terminal__dot terminal__dot--yellow"></span>
     <span class="terminal__dot terminal__dot--green"></span>
-    <span class="terminal__title">{{ site.data.terminal.title }}</span>
+    <span class="terminal__title">{{ cfg.title }}</span>
     <select class="terminal__scheme-select" id="schemeSelect">
       {% for s in site.data.terminal.schemes %}
       <option value="{{ s[0] }}"{% if s[0] == active %} selected{% endif %}>{{ s[0] }}</option>
@@ -13,84 +16,17 @@
     </select>
   </div>
   <div class="terminal__body">
-    {% for line in site.data.terminal.lines %}
-    <div class="terminal__line">
-      <span class="terminal__prompt" id="prompt{{ forloop.index0 }}">{{ site.data.terminal.prompt }}</span>
-      <span class="terminal__cmd" id="cmd{{ forloop.index0 }}"></span><span class="terminal__cursor" id="cursor{{ forloop.index0 }}">▊</span>
-    </div>
-    <div class="terminal__line terminal__output" id="output{{ forloop.index0 }}"></div>
-    {% endfor %}
+    <div id="terminal-output"></div>
   </div>
 </div>
 
+<!-- Pass config from Liquid to JS -->
 <script>
-  (function() {
-    var cfg = {{ site.data.terminal | jsonify }};
-    var schemes = cfg.schemes;
-    var saved = localStorage.getItem('terminal-scheme');
-    if (saved && schemes[saved]) {
-      applyScheme(saved);
-      document.getElementById('schemeSelect').value = saved;
-    }
-
-    document.getElementById('schemeSelect').addEventListener('change', function() {
-      applyScheme(this.value);
-      localStorage.setItem('terminal-scheme', this.value);
-    });
-
-    function applyScheme(name) {
-      var c = schemes[name];
-      var el = document.getElementById('terminal');
-      el.style.setProperty('--terminal-bg', c.background);
-      el.style.setProperty('--terminal-bar-bg', c.bar_background);
-      el.style.setProperty('--terminal-text', c.text);
-      el.style.setProperty('--terminal-prompt', c.prompt);
-      el.style.setProperty('--terminal-cmd', c.cmd);
-      el.style.setProperty('--terminal-output', c.output);
-      el.style.setProperty('--terminal-cursor', c.cursor);
-      el.style.setProperty('--terminal-title', c.title);
-    }
-
-    var lines = cfg.lines;
-    var cmdEls = [{% for line in site.data.terminal.lines %}document.getElementById('cmd{{ forloop.index0 }}'),{% endfor %}];
-    var outEls = [{% for line in site.data.terminal.lines %}document.getElementById('output{{ forloop.index0 }}'),{% endfor %}];
-    var cursors = [{% for line in site.data.terminal.lines %}document.getElementById('cursor{{ forloop.index0 }}'),{% endfor %}];
-    var prompts = [{% for line in site.data.terminal.lines %}document.getElementById('prompt{{ forloop.index0 }}'),{% endfor %}];
-    var lastIdx = lines.length - 1;
-    var afterOutputDelay = cfg.after_output_delay || 200;
-    var betweenLinesDelay = cfg.between_lines_delay || 300;
-
-    function typeCmd(idx, charIdx) {
-      if (idx > lastIdx) return;
-      var line = lines[idx];
-      prompts[idx].classList.add('active');
-      cursors[idx].classList.add('active');
-      if (charIdx < line.cmd.length) {
-        cmdEls[idx].textContent += line.cmd[charIdx];
-        setTimeout(function() { typeCmd(idx, charIdx + 1); }, line.speed || 50);
-      } else {
-        cursors[idx].classList.remove('active');
-        setTimeout(function() { showOutput(idx); }, afterOutputDelay);
-      }
-    }
-
-    function showOutput(idx) {
-      outEls[idx].textContent = lines[idx].output;
-      outEls[idx].classList.add('visible');
-      if (idx < lastIdx) {
-        setTimeout(function() {
-          cursors[idx + 1].classList.add('active');
-          typeCmd(idx + 1, 0);
-        }, betweenLinesDelay);
-      } else if (cfg.show_final_cursor !== false) {
-        var c = cursors[lastIdx];
-        c.classList.add('active');
-        setInterval(function() {
-          c.style.opacity = c.style.opacity === '0' ? '1' : '0';
-        }, cfg.cursor_blink_speed || 500);
-      }
-    }
-
-    setTimeout(function() { typeCmd(0, 0); }, cfg.start_delay || 400);
-  })();
+  window.TERMINAL_CONFIG = {{ site.data.terminal | jsonify }};
 </script>
+
+<!-- jQuery Terminal (jQuery is provided by the theme) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery.terminal@2.46.1/css/jquery.terminal.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/jquery.terminal@2.46.1/js/jquery.terminal.min.js"></script>
+
+<script src="{{ '/assets/js/terminal.js' | relative_url }}"></script>

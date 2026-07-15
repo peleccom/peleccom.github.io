@@ -22,6 +22,7 @@ The container auto-rebuilds on file changes (`--watch --force_polling`).
   - `navigation.yml` — site nav items
 - **Pages** use `layout: single` with `author_profile: true` (except blog which uses `layout: posts`)
 - **`_includes/`** — page-level includes: `tech-stack.html` (skills grid), `terminal-hero.html` (homepage), `project-cards.html` (hardcoded), `head/custom.html` (FA kit + favicons)
+- **Terminal** (`_includes/terminal-hero.html` + `assets/js/terminal.js`) — jQuery Terminal v2.46.1 widget. Single JS file handles virtual filesystem, boot animation, tab completion, and interactive commands. Config driven by `_data/terminal.yml`.
 - **`assets/css/main.scss`** — all custom styles. Imports Minimal Mistakes theme first, then overrides.
 - **CV page** (`alexander_pitkin_cv.html`) is a redirect to https://rxresu.me/peleccom/alexander-pitkin-cv
 

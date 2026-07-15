@@ -32,8 +32,8 @@ search: false
     padding-bottom: 0.3em;
 }
 
-// Terminal Hero
-.terminal {
+// Terminal Hero (jQuery Terminal)
+.terminal:not(#terminal-output) {
     background: var(--terminal-bg, #1e1e1e);
     border-radius: 8px;
     overflow: hidden;
@@ -88,53 +88,54 @@ search: false
 }
 
 .terminal__body {
-    padding: 16px;
     background: var(--terminal-bg, #1e1e1e);
+    padding: 0;
 }
 
-.terminal__line {
-    margin-bottom: 4px;
-    min-height: 1.4em;
+#terminal-output {
+    height: 350px;
+    padding: 16px;
+    background: var(--terminal-bg, #1e1e1e) !important;
+    color: var(--terminal-text, #f8f8f2) !important;
+    font-family: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+    font-size: 15px;
+    line-height: 1.5;
+    box-shadow: none !important;
 }
 
-.terminal__prompt {
-    color: var(--terminal-prompt, #00ff00);
-    margin-right: 8px;
-    opacity: 0;
-    transition: opacity 0.3s;
+// jquery.terminal sets `font-family: monospace` directly on its child
+// selectors (.cmd, .terminal-output > :not(.raw), and their span/a
+// descendants). Those rules apply to the children themselves and override
+// inheritance from the #terminal-output ID rule above, so the sans-serif
+// stack would not reach command lines / output without these overrides.
+// Scoping under #terminal-output raises specificity above jquery's
+// class-based selectors (no !important needed).
+#terminal-output .cmd,
+#terminal-output .cmd span:not(.fas):not(.far):not(.fa),
+#terminal-output .cmd-prompt,
+#terminal-output .terminal-output > :not(.raw),
+#terminal-output .terminal-output > :not(.raw) a,
+#terminal-output .terminal-output > :not(.raw) span:not(.fas):not(.far):not(.fa) {
+    font-family: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+    font-size: 12px;
 }
 
-.terminal__prompt.active {
-    opacity: 1;
+// Output / response lines (tagged in JS via finalize / .then)
+#terminal-output .term-out-line {
+    --color: var(--terminal-output, var(--terminal-text)) !important;
 }
-
-.terminal__cmd {
-    color: var(--terminal-cmd, #f8f8f2);
+// Command lines: boot-typed (tagged .term-cmd-line) and real submitted (.terminal-command)
+#terminal-output .term-cmd-line,
+#terminal-output .terminal-command {
+    --color: var(--terminal-cmd, var(--terminal-text)) !important;
 }
-
-.terminal__cursor {
-    display: none;
-    color: var(--terminal-cursor, #f8f8f2);
-    animation: blink 0.7s step-end infinite;
+// Current/live command input line
+#terminal-output .cmd {
+    --color: var(--terminal-cmd, var(--terminal-text)) !important;
 }
-
-.terminal__cursor.active {
-    display: inline;
-}
-
-@keyframes blink {
-    50% { opacity: 0; }
-}
-
-.terminal__output {
-    color: var(--terminal-output, #66d9ef);
-    padding-left: 20px;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.terminal__output.visible {
-    opacity: 1;
+// Prompt — green, overrides inherited --color
+#terminal-output .cmd-prompt {
+    color: var(--terminal-prompt, #00ff00) !important;
 }
 
 // Skills Sections
@@ -417,7 +418,6 @@ search: false
     }
   }
 
-// LinkedIn badge in sidebar
 // LinkedIn badge in sidebar (hidden on mobile)
 .linkedin-badge-wrapper {
     white-space: normal;
@@ -468,7 +468,6 @@ search: false
 
 // Full-width safety net for `classes: wide` single pages
 body.wide .page__content { max-width: none; }
-.wide .page__content { max-width: none; }
 
 // Skills layout: main content + sticky right-side TOC
 .skills-layout {

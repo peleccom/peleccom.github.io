@@ -103,3 +103,5 @@ analytics:
 
 atom_feed:
   hide: true
+exclude:
+  - AGENTS.md
